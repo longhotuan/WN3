@@ -18,7 +18,6 @@ library(RColorBrewer)
 library(rsconnect)
 library(DT)
 library(rworldmap)
-library(usethis)
 
 load("WN3_v2.RData")
 
