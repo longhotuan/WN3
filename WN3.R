@@ -60,6 +60,11 @@ ui <- dashboardPage(
                         valueBoxOutput("period")
                     ),
                     fluidRow(
+                        valueBoxOutput("project"),
+                        valueBoxOutput("money"),
+                        valueBoxOutput("period")
+                    ),
+                    fluidRow(
                         box(title = "Project info", width = 12, height = 700,
                             DT::dataTableOutput("table"
                                                 ,  width = "100%", height = 700
