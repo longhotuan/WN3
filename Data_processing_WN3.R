@@ -195,9 +195,14 @@ b <- as.data.frame(matrix(data = NA, nrow = nrow(WN3), ncol = length(levels(as.f
 colnames(b) <- levels(as.factor(unlist(WN3$Country)))
 WN4 <- bind_cols(WN3, b)
 
-for (i in nrow(WN4)){
-    for(j in (ncol(WN3)+1):ncol(WN4)){
-        if (WN3) # here
+for (i in 1:nrow(WN4)){
+    for(j in 1:length(WN4$Country[[i]])){
+        for(k in (ncol(WN3)+1):ncol(WN4)){
+            if (WN4$Country[[i]][[j]] == colnames(WN4[,k])){
+                WN4[i,k] <- colnames(WN4[,k])
+            }
+        }
     }
 }
+
 levels(as.factor(unlist(WN3$Country)))
