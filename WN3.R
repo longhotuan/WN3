@@ -18,16 +18,29 @@ library(RColorBrewer)
 library(rsconnect)
 library(DT)
 library(rworldmap)
+library(usethis)
+library(ggwordcloud)
+library(colorspace)
 
-load("WN3_v2.RData")
+WN3 <- read.csv("WN3_v2.csv", stringsAsFactors = FALSE)
+x <- read_csv("colnames.csv")
+colnames(WN3) <- x$x
+rm(x)
+
+first_country <- which(colnames(WN3) == "Afghanistan")
+last_country <- which (colnames(WN3) == "Zimbabwe")
+first_lat <- which(colnames(WN3) == "lat_Afghanistan")
+last_lat <- which (colnames(WN3) == "lat_Zimbabwe")
+first_long <- which (colnames(WN3) == "long_Afghanistan")
+last_long <- which (colnames(WN3) == "long_Zimbabwe")
+
 
 # 3 pages: general info: table + map, journal info: Top 20 journal + open-access , research info: Citation year, top keywords
 # + 6 value boxes: Total of number publication, total countries, total document types, total cites, total authors, percentage of open-access
 
 #### ui ####
 
-
-ui <- dashboardPage(
+ui <- dashboardPage(skin = 'red',
     # Dashboard header ####
     dashboardHeader(title="Water Nexus dashboard"),
     # Dashboard sidebar #### 
@@ -36,122 +49,43 @@ ui <- dashboardPage(
                     menuItem("About", 
                              tabName = "about",
                              icon = icon("info")),
-                    menuItem("Project info", 
+                    menuItem("Overview", 
                              tabName = "info",
-                             icon = icon("list-ol")), 
-                    menuItem("Cooperation", 
-                             tabName = "coop",
-                             icon = icon("handshake")),
+                             icon = icon("database")), 
+                    menuItem("Journal info", 
+                             tabName = "journal",
+                             icon = icon("newspaper")),
+                    menuItem("Publication info", 
+                             tabName = "research",
+                             icon = icon("microscope")),
                     selectInput(inputId = "country", label = "Select a country", 
-                                choices = c(All = "All",levels(Water_Nexus$COUNTRY))),
-                    selectInput(inputId = "year", label = "Select the first year",
-                                choices = c(All = "All",levels(as.factor(Water_Nexus$X1st.year.exp))))
+                                choices = c(All = "All", colnames(WN3[, first_country:last_country]))),
+                    selectInput(inputId = "year", label = "Select a year",
+                                choices = c(All = "All",levels(as.factor(WN3$Year))))
         )
     ),
     # Dashboard body #### 
     dashboardBody(
         tabItems(
-            # Info tab content ####
-            tabItem(tabName = "info",
-                    fluidRow(
-                        valueBoxOutput("project"),
-                        valueBoxOutput("money"),
-                        valueBoxOutput("period")
-                    ),
-                    fluidRow(
-                        valueBoxOutput("project"),
-                        valueBoxOutput("money"),
-                        valueBoxOutput("period")
-                    ),
-                    fluidRow(
-                        box(title = "Project info", width = 12, height = 700,
-                            DT::dataTableOutput("table"
-                                                ,  width = "100%", height = 700
-                            )
-                        )
-                    ),
-                    fluidRow(
-                        box(title = "Project map", width = 12, 
-                            leafletOutput("map", width = "100%", height = 400)
-                        )
-                    )
-            ), # end tabItem of info tab
-            # Cooperation tab content ####
-            tabItem(tabName = "coop",
-                    fluidRow(
-                        valueBoxOutput("project1"),
-                        valueBoxOutput("money1"),
-                        valueBoxOutput("period1")
-                    ),
-                    fluidRow(
-                        box(title = "Type of cooperation", width = 12,
-                            plotlyOutput("coop")
-                        )
-                    ),
-                    fluidRow(
-                        box(title = "Contractors", width = 12,
-                            plotlyOutput("contractor")
-                        )
-                    )
-            ), # end of cooperation tab content
-            # Actor tab content ####
-            tabItem(tabName = "actor",
-                    fluidRow(
-                        valueBoxOutput("project2"),
-                        valueBoxOutput("money2"),
-                        valueBoxOutput("period2")
-                    ),
-                    fluidRow(
-                        box(title = "Funding Actors", width = 12,
-                            plotlyOutput("budgetholder")
-                        )
-                    ),
-                    fluidRow(
-                        box(title = "Funding revolution", width = 12,
-                            plotlyOutput("allocation")
-                        )
-                    )
-            ), # end tabItem of actor tab
-            # Budget-holders tab content ####
-            tabItem(tabName = "budget",
-                    fluidRow(
-                        valueBoxOutput("project3"),
-                        valueBoxOutput("money3"),
-                        valueBoxOutput("period3")
-                    ),
-                    fluidRow(
-                        box(title = "Aid category", width = 12,
-                            plotlyOutput("aid")
-                        )
-                    ),
-                    fluidRow(
-                        box(title = "Budget category", width = 12,
-                            plotlyOutput("budget")
-                        )
-                    )
-            ), # end tabItem of budget tab
             # About tab content ####
             tabItem(tabName = "about",
                     fluidRow(
                         box(width = 12, 
                             h2("About the dashboard"),
                             hr(),
-                            h3("Projects in the Water Sector by Belgian Actors"),
+                            h3("Water-Related Research conducted by Belgian Actors"),
                             br(),
-                            h4("The Water Projects Dashboard is an interactive platform centralizing and displaying information about the water-related projects led by Belgian actors. This platform is  dynamic and aim to incorporate upcoming projects. So far, the platform mostly inventories the projects funded by the Belgian Ministry of Foreign Affairs, Development Cooperation and Humanitarian Aid (DGD) from 1998 to present days. However, we are building a broader database that includes projects funded by other funding organisms.")
-                        )
+                            h5("The Water Research Dashboard is an interactive platform centralizing, displaying and examining information about the water-related research that have involved at least one Belgian actor over the 2009 – 2019 period. So far, the water-related bibliographic data were extracted from the Scopus database – the largest abstract and citation database of peer-reviewed literature.")                        )
                     ),
                     fluidRow(
                         box(width = 12, 
                             h2("About the dataset"),
                             hr(),
-                            h3("Dataset of Directorate-General for Development Cooperation and Humanitarian Aid"),
+                            h3("Bibliometrix analysis of water research conducted by Belgian Actors"),
                             br(),
-                            h4("The dataset of Directorate-General for Development Cooperation and Humanitarian Aid (DGD) contains 12550 projects in total from 1987 to 2018. The dataset mainly focuses on projects in the water sector. As such, projects related to including environment, agriculture, fisheries, forestry, and hydroelectricity are also included. The dataset includes 191 attributes which are characteristics of any projects that have cooperation with DGD. The attributes cover from basic information of the projects, e.g. title, year, period, etc., to specific properties of the projects, i.e. scale of their involvement with respect to Sustainable Development Goals (SDGs), target groups, reached results, etc."),
-                            br(),
-                            h4("Besides this dataset, a broader database that includes projects funded by other funding organizations, such as VLIR-UOS, ARES, VPWvO, Enabel, etc., is being developed. If you want to add the information about the projects funded/implemented by your organisation, please send us an email to: ",
-                               a("waternexusbelgium@gmail.com",
-                                 href = "mailto: waternexusbelgium@gmail.com"))
+                            h5("We adapted the list of keywords that can be found in the water-related research. This list was proposed by",
+                               a("Mehmood (2019)", href = "https://inweh.unu.edu/bibliometrics-of-water-research/"),
+                               "in the United Nations University-INWEH 2019. The final queries of 248 keywords were applied to download the citations and bibliographies directly in Scopus website as well as in open-source statistical software R using rscopus package.")
                         )
                     ),
                     fluidRow(
@@ -166,7 +100,752 @@ ui <- dashboardPage(
                                    src = "Logo.jpg") 
                         )
                     )
-            ) # end about tabItem
+            ), # end of About tabItem
+            # Info tab content ####
+            tabItem(tabName = "info",
+                    fluidRow(
+                        valueBoxOutput("Publication"),
+                        valueBoxOutput("TotalCountry"),
+                        valueBoxOutput("Citation")
+                    ),
+                    fluidRow(
+                        valueBoxOutput("DocumentType"),
+                        valueBoxOutput("OpenAccess"),
+                        valueBoxOutput("Totaljournal")
+                    ),
+                    fluidRow(
+                        box(title = "Research info", width = 12, height = 700,
+                            DT::dataTableOutput("table"
+                                                ,  width = "100%", height = 700
+                            )
+                        )
+                    ),
+                    fluidRow(
+                        box(title = "Collaboration map", width = 12, 
+                            leafletOutput("map", width = "100%", height = 400) # per document types
+                        )
+                    )
+            ), # end of info tabItem
+            # Journal tab content ####
+            tabItem(tabName = "journal",
+                    fluidRow(
+                        valueBoxOutput("Publication1"),
+                        valueBoxOutput("TotalCountry1"),
+                        valueBoxOutput("Citation1")
+                    ),
+                    fluidRow(
+                        valueBoxOutput("DocumentType1"),
+                        valueBoxOutput("OpenAccess1"),
+                        valueBoxOutput("Totaljournal1")
+                    ),
+                    fluidRow(
+                        box(width = 12,
+                            title = "Top most frequent journals",
+                            plotlyOutput("topjournal")
+                        )
+                    ),
+                    fluidRow(
+                        box(width = 12,
+                            title = "Open Access", 
+                            plotlyOutput("Openaccess")
+                        )
+                    )
+            ), # end of Journal tabItem
+            # Research tab content ####
+            tabItem(tabName = "research",
+                    fluidRow(
+                        valueBoxOutput("Publication2"),
+                        valueBoxOutput("TotalCountry2"),
+                        valueBoxOutput("Citation2")
+                    ),
+                    fluidRow(
+                        valueBoxOutput("DocumentType2"),
+                        valueBoxOutput("OpenAccess2"),
+                        valueBoxOutput("Totaljournal2")
+                    ),
+                    fluidRow(
+                        box(title = "Publication Year", width = 12,
+                            plotlyOutput("Pubyear")
+                        )
+                    ),
+                    fluidRow(
+                        box(title = "Top keywords", width = 12,
+                            plotOutput("Topkw")
+                        )
+                    )
+            ) # end tabItem of research tab
         ) # end tabItems
     ) # end dashboardbody
 ) # end dashboardpage
+#### server ####
+
+server <- function(input, output, session) {
+    # Setting reactivities ####
+    df <- reactive({WN3})
+    
+    df_country <- reactive({
+        input$country
+    })
+    
+    chosen_year <- reactive({
+        if(df_country() != "All"){
+            year_1 <- df()[!is.na(df()[, colnames(df()) == df_country()]),]
+            year_2 <- levels(as.factor(year_1$Year))
+            year_2
+        } else {
+            levels(as.factor(df()$Year))
+        }
+    })
+    
+    observe({
+        updateSelectInput(session, inputId = "year", label = "Select a year",
+                          choices = c(All = "All", chosen_year()))
+    })
+    
+    df_year <- reactive({
+        input$year
+    })
+    
+    # Output valuebox in Info tab ####
+    output$Publication <- renderValueBox({
+        selectedData<- df()
+
+        if (df_country() == "All"){
+            if (df_year() == "All") {
+                selectedData <- df()
+            } else {
+                selectedData <- df() %>% filter(Year == df_year())
+            }
+        } else {
+            if (df_year() == "All") {
+                selectedData <- df()[!is.na(df()[, colnames(df()) == df_country()]),]
+            } else {
+                selectedData2 <- df() %>% filter(Year == df_year())
+                selectedData <- selectedData2[!is.na(selectedData2[, colnames(selectedData2) == df_country()]),]
+            }
+        }
+        
+        valueBox(
+            value = nrow(selectedData),
+            subtitle = "Total number of publication",
+            icon = icon("newspaper"),
+            color = "purple"
+        )
+    })
+    output$TotalCountry <- renderValueBox({
+        
+        if (df_country() == "All"){
+            if (df_year() == "All") {
+                selectedData <- df()
+            } else {
+                selectedData <- df() %>% filter(Year == df_year())
+            }
+        } else {
+            if (df_year() == "All") {
+                selectedData <- df()[!is.na(df()[, colnames(df()) == df_country()]),]
+            } else {
+                selectedData2 <- df() %>% filter(Year == df_year())
+                selectedData <- selectedData2[!is.na(selectedData2[, colnames(selectedData2) == df_country()]),]
+            }
+        }
+        selectedData_v3 <- selectedData[,first_country:last_country][, colSums(is.na(selectedData[,first_country:last_country])) < nrow(selectedData[,first_country:last_country])]
+        valueBox(
+            value =ncol(selectedData_v3),
+            subtitle = "Total number of country",
+            icon = icon("flag"),
+            color = "yellow"
+        )
+    })
+    output$Citation <- renderValueBox({
+        if (df_country() == "All"){
+            if (df_year() == "All") {
+                selectedData <- df()
+            } else {
+                selectedData <- df() %>% filter(Year == df_year())
+            }
+        } else {
+            if (df_year() == "All") {
+                selectedData <- df()[!is.na(df()[, colnames(df()) == df_country()]),]
+            } else {
+                selectedData2 <- df() %>% filter(Year == df_year())
+                selectedData <- selectedData2[!is.na(selectedData2[, colnames(selectedData2) == df_country()]),]
+            }
+        }
+        valueBox(
+            value = sum(selectedData$`Cited by`, na.rm = TRUE),
+            subtitle = "Total number of citation",
+            icon = icon("file-signature"),
+            color = "blue"
+        )
+    })
+    output$DocumentType <- renderValueBox({
+        if (df_country() == "All"){
+            if (df_year() == "All") {
+                selectedData <- df()
+            } else {
+                selectedData <- df() %>% filter(Year == df_year())
+            }
+        } else {
+            if (df_year() == "All") {
+                selectedData <- df()[!is.na(df()[, colnames(df()) == df_country()]),]
+            } else {
+                selectedData2 <- df() %>% filter(Year == df_year())
+                selectedData <- selectedData2[!is.na(selectedData2[, colnames(selectedData2) == df_country()]),]
+            }
+        }
+        valueBox(
+            value = length(levels(as.factor(selectedData$`Document Type`))),
+            subtitle = "Document type",
+            icon = icon("folder-open"),
+            color = "red"
+        )
+    })
+    output$OpenAccess <- renderValueBox({
+        if (df_country() == "All"){
+            if (df_year() == "All") {
+                selectedData <- df()
+            } else {
+                selectedData <- df() %>% filter(Year == df_year())
+            }
+        } else {
+            if (df_year() == "All") {
+                selectedData <- df()[!is.na(df()[, colnames(df()) == df_country()]),]
+            } else {
+                selectedData2 <- df() %>% filter(Year == df_year())
+                selectedData <- selectedData2[!is.na(selectedData2[, colnames(selectedData2) == df_country()]),]
+            }
+        }
+        valueBox(
+            value = round(sum(!is.na(selectedData$`Access Type`))*100/(sum(is.na(selectedData$`Access Type`))+sum(!is.na(selectedData$`Access Type`))), digits = 2),
+            subtitle = "Percentage of open-access publication",
+            icon = icon("lock-open"),
+            color = "purple"
+        )
+    })
+    output$Totaljournal <- renderValueBox({
+        if (df_country() == "All"){
+            if (df_year() == "All") {
+                selectedData <- df()
+            } else {
+                selectedData <- df() %>% filter(Year == df_year())
+            }
+        } else {
+            if (df_year() == "All") {
+                selectedData <- df()[!is.na(df()[, colnames(df()) == df_country()]),]
+            } else {
+                selectedData2 <- df() %>% filter(Year == df_year())
+                selectedData <- selectedData2[!is.na(selectedData2[, colnames(selectedData2) == df_country()]),]
+            }
+        }
+        valueBox(
+            value = nlevels(as.factor(selectedData$`Source title`)),
+            subtitle = "Total number of journal",
+            icon = icon("book"),
+            color = "maroon"
+        )
+    })
+    # Output valuebox in Journal tab ####
+    output$Publication1 <- renderValueBox({
+        selectedData<- df()
+        
+        if (df_country() == "All"){
+            if (df_year() == "All") {
+                selectedData <- df()
+            } else {
+                selectedData <- df() %>% filter(Year == df_year())
+            }
+        } else {
+            if (df_year() == "All") {
+                selectedData <- df()[!is.na(df()[, colnames(df()) == df_country()]),]
+            } else {
+                selectedData2 <- df() %>% filter(Year == df_year())
+                selectedData <- selectedData2[!is.na(selectedData2[, colnames(selectedData2) == df_country()]),]
+            }
+        }
+        
+        valueBox(
+            value = nrow(selectedData),
+            subtitle = "Total number of publication",
+            icon = icon("newspaper"),
+            color = "purple"
+        )
+    })
+    output$TotalCountry1 <- renderValueBox({
+        
+        if (df_country() == "All"){
+            if (df_year() == "All") {
+                selectedData <- df()
+            } else {
+                selectedData <- df() %>% filter(Year == df_year())
+            }
+        } else {
+            if (df_year() == "All") {
+                selectedData <- df()[!is.na(df()[, colnames(df()) == df_country()]),]
+            } else {
+                selectedData2 <- df() %>% filter(Year == df_year())
+                selectedData <- selectedData2[!is.na(selectedData2[, colnames(selectedData2) == df_country()]),]
+            }
+        }
+        selectedData_v3 <- selectedData[,first_country:last_country][, colSums(is.na(selectedData[,first_country:last_country])) < nrow(selectedData[,first_country:last_country])]
+        valueBox(
+            value =ncol(selectedData_v3),
+            subtitle = "Total number of country",
+            icon = icon("flag"),
+            color = "yellow"
+        )
+    })
+    output$Citation1 <- renderValueBox({
+        if (df_country() == "All"){
+            if (df_year() == "All") {
+                selectedData <- df()
+            } else {
+                selectedData <- df() %>% filter(Year == df_year())
+            }
+        } else {
+            if (df_year() == "All") {
+                selectedData <- df()[!is.na(df()[, colnames(df()) == df_country()]),]
+            } else {
+                selectedData2 <- df() %>% filter(Year == df_year())
+                selectedData <- selectedData2[!is.na(selectedData2[, colnames(selectedData2) == df_country()]),]
+            }
+        }
+        valueBox(
+            value = sum(selectedData$`Cited by`, na.rm = TRUE),
+            subtitle = "Total number of citation",
+            icon = icon("file-signature"),
+            color = "blue"
+        )
+    })
+    output$DocumentType1 <- renderValueBox({
+        if (df_country() == "All"){
+            if (df_year() == "All") {
+                selectedData <- df()
+            } else {
+                selectedData <- df() %>% filter(Year == df_year())
+            }
+        } else {
+            if (df_year() == "All") {
+                selectedData <- df()[!is.na(df()[, colnames(df()) == df_country()]),]
+            } else {
+                selectedData2 <- df() %>% filter(Year == df_year())
+                selectedData <- selectedData2[!is.na(selectedData2[, colnames(selectedData2) == df_country()]),]
+            }
+        }
+        valueBox(
+            value = length(levels(as.factor(selectedData$`Document Type`))),
+            subtitle = "Document type",
+            icon = icon("folder-open"),
+            color = "red"
+        )
+    })
+    output$OpenAccess1 <- renderValueBox({
+        if (df_country() == "All"){
+            if (df_year() == "All") {
+                selectedData <- df()
+            } else {
+                selectedData <- df() %>% filter(Year == df_year())
+            }
+        } else {
+            if (df_year() == "All") {
+                selectedData <- df()[!is.na(df()[, colnames(df()) == df_country()]),]
+            } else {
+                selectedData2 <- df() %>% filter(Year == df_year())
+                selectedData <- selectedData2[!is.na(selectedData2[, colnames(selectedData2) == df_country()]),]
+            }
+        }
+        valueBox(
+            value = round(sum(!is.na(selectedData$`Access Type`))*100/(sum(is.na(selectedData$`Access Type`))+sum(!is.na(selectedData$`Access Type`))), digits = 2),
+            subtitle = "Percentage of open-access publication",
+            icon = icon("lock-open"),
+            color = "purple"
+        )
+    })
+    output$Totaljournal1 <- renderValueBox({
+        if (df_country() == "All"){
+            if (df_year() == "All") {
+                selectedData <- df()
+            } else {
+                selectedData <- df() %>% filter(Year == df_year())
+            }
+        } else {
+            if (df_year() == "All") {
+                selectedData <- df()[!is.na(df()[, colnames(df()) == df_country()]),]
+            } else {
+                selectedData2 <- df() %>% filter(Year == df_year())
+                selectedData <- selectedData2[!is.na(selectedData2[, colnames(selectedData2) == df_country()]),]
+            }
+        }
+        valueBox(
+            value = nlevels(as.factor(selectedData$`Source title`)),
+            subtitle = "Total number of journal",
+            icon = icon("book"),
+            color = "maroon"
+        )
+    })
+    # Output valuebox in Research tab ####
+    output$Publication2 <- renderValueBox({
+        selectedData<- df()
+        
+        if (df_country() == "All"){
+            if (df_year() == "All") {
+                selectedData <- df()
+            } else {
+                selectedData <- df() %>% filter(Year == df_year())
+            }
+        } else {
+            if (df_year() == "All") {
+                selectedData <- df()[!is.na(df()[, colnames(df()) == df_country()]),]
+            } else {
+                selectedData2 <- df() %>% filter(Year == df_year())
+                selectedData <- selectedData2[!is.na(selectedData2[, colnames(selectedData2) == df_country()]),]
+            }
+        }
+        
+        valueBox(
+            value = nrow(selectedData),
+            subtitle = "Total number of publication",
+            icon = icon("newspaper"),
+            color = "purple"
+        )
+    })
+    output$TotalCountry2 <- renderValueBox({
+        
+        if (df_country() == "All"){
+            if (df_year() == "All") {
+                selectedData <- df()
+            } else {
+                selectedData <- df() %>% filter(Year == df_year())
+            }
+        } else {
+            if (df_year() == "All") {
+                selectedData <- df()[!is.na(df()[, colnames(df()) == df_country()]),]
+            } else {
+                selectedData2 <- df() %>% filter(Year == df_year())
+                selectedData <- selectedData2[!is.na(selectedData2[, colnames(selectedData2) == df_country()]),]
+            }
+        }
+        selectedData_v3 <- selectedData[,first_country:last_country][, colSums(is.na(selectedData[,first_country:last_country])) < nrow(selectedData[,first_country:last_country])]
+        valueBox(
+            value =ncol(selectedData_v3),
+            subtitle = "Total number of country",
+            icon = icon("flag"),
+            color = "yellow"
+        )
+    })
+    output$Citation2 <- renderValueBox({
+        if (df_country() == "All"){
+            if (df_year() == "All") {
+                selectedData <- df()
+            } else {
+                selectedData <- df() %>% filter(Year == df_year())
+            }
+        } else {
+            if (df_year() == "All") {
+                selectedData <- df()[!is.na(df()[, colnames(df()) == df_country()]),]
+            } else {
+                selectedData2 <- df() %>% filter(Year == df_year())
+                selectedData <- selectedData2[!is.na(selectedData2[, colnames(selectedData2) == df_country()]),]
+            }
+        }
+        valueBox(
+            value = sum(selectedData$`Cited by`, na.rm = TRUE),
+            subtitle = "Total number of citation",
+            icon = icon("file-signature"),
+            color = "blue"
+        )
+    })
+    output$DocumentType2 <- renderValueBox({
+        if (df_country() == "All"){
+            if (df_year() == "All") {
+                selectedData <- df()
+            } else {
+                selectedData <- df() %>% filter(Year == df_year())
+            }
+        } else {
+            if (df_year() == "All") {
+                selectedData <- df()[!is.na(df()[, colnames(df()) == df_country()]),]
+            } else {
+                selectedData2 <- df() %>% filter(Year == df_year())
+                selectedData <- selectedData2[!is.na(selectedData2[, colnames(selectedData2) == df_country()]),]
+            }
+        }
+        valueBox(
+            value = length(levels(as.factor(selectedData$`Document Type`))),
+            subtitle = "Document type",
+            icon = icon("folder-open"),
+            color = "red"
+        )
+    })
+    output$OpenAccess2 <- renderValueBox({
+        if (df_country() == "All"){
+            if (df_year() == "All") {
+                selectedData <- df()
+            } else {
+                selectedData <- df() %>% filter(Year == df_year())
+            }
+        } else {
+            if (df_year() == "All") {
+                selectedData <- df()[!is.na(df()[, colnames(df()) == df_country()]),]
+            } else {
+                selectedData2 <- df() %>% filter(Year == df_year())
+                selectedData <- selectedData2[!is.na(selectedData2[, colnames(selectedData2) == df_country()]),]
+            }
+        }
+        valueBox(
+            value = round(sum(!is.na(selectedData$`Access Type`))*100/(sum(is.na(selectedData$`Access Type`))+sum(!is.na(selectedData$`Access Type`))), digits = 2),
+            subtitle = "Percentage of open-access publication",
+            icon = icon("lock-open"),
+            color = "purple"
+        )
+    })
+    output$Totaljournal2 <- renderValueBox({
+        if (df_country() == "All"){
+            if (df_year() == "All") {
+                selectedData <- df()
+            } else {
+                selectedData <- df() %>% filter(Year == df_year())
+            }
+        } else {
+            if (df_year() == "All") {
+                selectedData <- df()[!is.na(df()[, colnames(df()) == df_country()]),]
+            } else {
+                selectedData2 <- df() %>% filter(Year == df_year())
+                selectedData <- selectedData2[!is.na(selectedData2[, colnames(selectedData2) == df_country()]),]
+            }
+        }
+        valueBox(
+            value = nlevels(as.factor(selectedData$`Source title`)),
+            subtitle = "Total number of journal",
+            icon = icon("book"),
+            color = "maroon"
+        )
+    })
+    # Output table in Info tab ####
+    output$table <- DT::renderDataTable(server = FALSE, {
+        if (df_country() == "All"){
+            if (df_year() == "All") {
+                selectedData <- df()
+            } else {
+                selectedData <- df() %>% filter(Year == df_year())
+            }
+        } else {
+            if (df_year() == "All") {
+                selectedData <- df()[!is.na(df()[, colnames(df()) == df_country()]),]
+            } else {
+                selectedData2 <- df() %>% filter(Year == df_year())
+                selectedData <- selectedData2[!is.na(selectedData2[, colnames(selectedData2) == df_country()]),]
+            }
+        }
+        data_selected <- selectedData[,c("Authors", "Title", "Year", "Abbreviated Source Title", "Cited by", 
+                                         "Document Type", "DOI")]
+        
+        DT::datatable({DT::datatable(data_selected)
+            data_selected$DOI <- paste0("<a href='",data_selected$DOI,"' target='_blank'>",data_selected$DOI,"</a>")
+            data_selected
+        }, escape = FALSE,
+        filter="top", 
+        selection="multiple", 
+        extensions = c('Buttons'),
+        options = list(sDom  = '<"top"pB>t<"bottom"i>r',
+                       pageLength = 5,
+                       buttons = c('copy', 'csv', 'excel', 'pdf', 'print'),
+                       scrollX = TRUE,
+                       autoWidth = FALSE))
+    })
+    
+    # Output map in Info tab ####
+    output$map <- renderLeaflet({
+        if (df_country() == "All"){
+            if (df_year() == "All") {
+                selectedData <- df()
+            } else {
+                selectedData <- df() %>% filter(Year == df_year())
+            }
+        } else {
+            if (df_year() == "All") {
+                selectedData <- df()[!is.na(df()[, colnames(df()) == df_country()]),]
+            } else {
+                selectedData2 <- df() %>% filter(Year == df_year())
+                selectedData <- selectedData2[!is.na(selectedData2[, colnames(selectedData2) == df_country()]),]
+            }
+        }
+        
+        selectedData_v2 <- selectedData[,c(first_country:last_country, 17)] %>%
+            gather(key = "Country", value = "value", -`Document Type`, na.rm =TRUE) 
+        
+        selectedData_v3 <- selectedData[,c(first_lat:last_lat, 17)] %>%
+            gather(key = "Lat", value = "value", -`Document Type`, na.rm =TRUE) 
+        
+        selectedData_v4 <- selectedData[,c(first_long:last_long, 17)] %>%
+            gather(key = "Long", value = "value", -`Document Type`, na.rm =TRUE) 
+        
+        
+        selectedData_v2$lat <- selectedData_v3$value
+        selectedData_v2$long <- selectedData_v4$value
+        
+        selectedData_v2 <- selectedData_v2 %>% 
+            group_by(Country, lat, long, `Document Type`) %>%
+            summarise(n=n()) %>%
+            spread(key = `Document Type`, value = n)
+        
+        selectedData_v2$Total <- rowSums(subset(selectedData_v2, select = -c(Country, lat, long)), na.rm = TRUE)
+        selectedData_v2 <- selectedData_v2[-which(selectedData_v2$Country == "Belgium"),]
+        
+        
+        tilesURL <- '//server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}'
+        colors <- brewer.pal(n = 12, name = "Paired")
+        colors <- colors[c(2:12,1)]
+        leaflet() %>%
+            addTiles(tilesURL) %>%
+            fitBounds(lng1 = -141.152344, lat1 = 55.646599, lng2 = 161.542969, lat2 = -52.194140) %>%
+            addMinicharts(selectedData_v2$lat, selectedData_v2$long,
+                          type = "pie",
+                          chartdata = subset(selectedData_v2, select = -c(Country, lat, long, Total)),
+                          colorPalette = colors,
+                          width = 80 * sqrt(selectedData_v2$Total) / sqrt(max(selectedData_v2$Total)),
+                          transitionTime = 0)
+    })
+    
+    # Output journal in Journal tab ####
+    output$topjournal <- renderPlotly({
+        if (df_country() == "All"){
+            if (df_year() == "All") {
+                selectedData <- df()
+            } else {
+                selectedData <- df() %>% filter(Year == df_year())
+            }
+        } else {
+            if (df_year() == "All") {
+                selectedData <- df()[!is.na(df()[, colnames(df()) == df_country()]),]
+            } else {
+                selectedData2 <- df() %>% filter(Year == df_year())
+                selectedData <- selectedData2[!is.na(selectedData2[, colnames(selectedData2) == df_country()]),]
+            }
+        }
+        WN_journal <- selectedData %>% select(`Source title`) %>% 
+            dplyr::group_by(`Source title`) %>% 
+            dplyr::summarise(n=n()) %>% 
+            dplyr::arrange(desc(n)) %>% 
+            slice(1:20)
+        
+        ggplotly(ggplot(WN_journal[1:20,], aes(x=reorder(`Source title`, n),y = n)) +
+                     geom_bar(stat = "identity",
+                              position = position_stack(reverse = TRUE), 
+                              fill = "tomato") +
+                     coord_flip() +
+                     theme_bw() +
+                     xlab("Journals") +
+                     ylab("Number of publications") +
+                     theme(text=element_text(family = "Arial")) +
+                     theme(axis.title.y = element_blank())
+        )
+    })
+    # Output openaccess in Journal tab ####
+    output$Openaccess <- renderPlotly({
+        if (df_country() == "All"){
+            if (df_year() == "All") {
+                selectedData <- df()
+            } else {
+                selectedData <- df() %>% filter(Year == df_year())
+            }
+        } else {
+            if (df_year() == "All") {
+                selectedData <- df()[!is.na(df()[, colnames(df()) == df_country()]),]
+            } else {
+                selectedData2 <- df() %>% filter(Year == df_year())
+                selectedData <- selectedData2[!is.na(selectedData2[, colnames(selectedData2) == df_country()]),]
+            }
+        }
+
+        WN_OA <- selectedData %>% select(`Access Type`, Year) %>% 
+            dplyr::group_by(`Access Type`,Year) %>% 
+            dplyr::summarise(n=n()) 
+        WN_OA2 <- WN_OA[1:11,]
+        WN_OA2$`Open Access` <- round(WN_OA2$n*100/(WN_OA[12:22,]$n+WN_OA2$n), 2)
+        
+        ggplotly(ggplot(WN_OA2, aes(x = Year,  y = `Open Access`)) +
+                     geom_point(size = 2, color = 'tomato')+
+                     geom_line(size = 1.1125, color = 'tomato')+
+                     theme_bw() +
+                     xlab("Year") +
+                     ylab("Open Acess (%)") +
+                     scale_x_continuous(name = "Year", limits = c(2009,2019), breaks = c(2009:2019)) +
+                     theme(text=element_text(family = "Arial")) +
+                     theme(legend.title = element_blank()) +
+                     theme(legend.text =  element_blank())
+        )
+    })
+    # Output publication year in Research tab ####
+    output$Pubyear <- renderPlotly({
+        if (df_country() == "All"){
+            if (df_year() == "All") {
+                selectedData <- df()
+            } else {
+                selectedData <- df() %>% filter(Year == df_year())
+            }
+        } else {
+            if (df_year() == "All") {
+                selectedData <- df()[!is.na(df()[, colnames(df()) == df_country()]),]
+            } else {
+                selectedData2 <- df() %>% filter(Year == df_year())
+                selectedData <- selectedData2[!is.na(selectedData2[, colnames(selectedData2) == df_country()]),]
+            }
+        }
+        WN_PU_year <- selectedData %>% select(Year,`Document Type`) %>% 
+            dplyr::group_by(Year, `Document Type`) %>% 
+            dplyr::summarise(`Number of publication`=n()) %>% 
+            dplyr::arrange(Year)
+        
+        ggplotly(ggplot(WN_PU_year, aes(x=Year, y=`Number of publication`, color = `Document Type`, group = `Document Type`))+
+                     geom_point(size = 2)+
+                     geom_line(size = 1.1125)+
+                     theme_bw() +
+                     xlab("Year") +
+                     ylab("Number of Publication") +
+                     theme(text=element_text(family = "Arial")) +
+                     scale_x_continuous(name = "Year", limits = c(2009,2019), breaks = c(2009:2019)) +
+                     theme(legend.title = element_blank())
+        )
+        
+    })
+    # Output top keywords in Research tab
+    output$Topkw <- renderPlot({
+        if (df_country() == "All"){
+            if (df_year() == "All") {
+                selectedData <- df()
+            } else {
+                selectedData <- df() %>% filter(Year == df_year())
+            }
+        } else {
+            if (df_year() == "All") {
+                selectedData <- df()[!is.na(df()[, colnames(df()) == df_country()]),]
+            } else {
+                selectedData2 <- df() %>% filter(Year == df_year())
+                selectedData <- selectedData2[!is.na(selectedData2[, colnames(selectedData2) == df_country()]),]
+            }
+        }
+        KW <- function(x){
+            keyword <- strsplit(x, "; ")
+            for (i in 1:length(keyword)){
+                keyword[i] <- as.data.frame(matrix(as.data.frame(keyword[i])))
+            }
+            keyword2 <- rbindlist(keyword)
+            colnames(keyword2)[1]<- "keyword"
+            keyword2<- keyword2[complete.cases(keyword2),]
+            keyword2$keyword <- str_to_title(keyword2$keyword)
+            keyword3 <- keyword2 %>%
+                dplyr::group_by(keyword) %>% 
+                dplyr::summarise(n=n()) %>% 
+                dplyr::arrange(desc(n)) 
+            return(keyword3)
+        }
+        WN_TopKW <- KW(selectedData$`Author Keywords`)
+        ggplot(WN_TopKW[1:50,], aes(label = keyword, size =n,color = rainbow_hcl(50))) +
+            geom_text_wordcloud_area(shape = "circle") +
+            scale_size_area(max_size = 25) +
+            theme_minimal()
+    })
+}
+
+#### Run the application ####
+shinyApp(ui = ui, server = server)
