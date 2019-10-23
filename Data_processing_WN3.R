@@ -205,4 +205,47 @@ for (i in 1:nrow(WN4)){
     }
 }
 
-levels(as.factor(unlist(WN3$Country)))
+WN5 <- WN4[, -c(19:22)]
+write.csv(WN5, "WN3.csv", row.names = FALSE)
+
+colnames(b) <- paste("lat",levels(as.factor(unlist(WN3$Country))), sep = "_")
+WN6 <- bind_cols(WN5, b)
+colnames(b) <- paste("long",levels(as.factor(unlist(WN3$Country))), sep = "_")
+WN6 <- bind_cols(WN6, b)
+c <- ncol(WN5)-ncol(WN3)+4
+
+lat_long2 <- lat_long[lat_long$Country %in% colnames(WN5[,19:204]),]
+lat_long3 <- lat_long2 %>%  arrange(match(Country, colnames(WN5[,19:204])))
+View(cbind(lat_long3[,], colnames(WN5[,19:204]))) ### --> correct
+
+for (i in 19:204){
+    WN6[which(!is.na(WN6[,i])),i + 186] <- lat_long3$x[i-18]
+    WN6[which(!is.na(WN6[,i])),i + 186*2] <- lat_long3$y[i-18]
+}
+
+# test
+a <- vector(mode = "character", 0)
+for (i in 19:204){
+    if(sum(which(is.na(WN6[,i])) != which(is.na(WN6[,i + 186]))) >0){
+        a <- c(a, i)
+    }
+}
+b <- vector(mode = "character", 0)
+for (i in 19:204){
+    if(sum(which(is.na(WN6[,i])) != which(is.na(WN6[,i + 186*2]))) >0){
+        b <- c(b, i)
+    }
+} 
+c1 <- vector(mode = "character", 0)
+c2 <- vector(mode = "character", 0)
+
+for (i in 19:204){
+    if(WN6[which(!is.na(WN6[,i])),i+186] != lat_long3$x[i-18]){
+        c1 <- c(c1,i)
+    }
+    if(WN6[which(!is.na(WN6[,i])),i+186*2] != lat_long3$y[i-18]){
+        c2 <- c(c2,i)
+    }
+}
+
+write.csv(WN6,"WN3_v2.csv", row.names = FALSE)
