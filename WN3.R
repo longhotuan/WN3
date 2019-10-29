@@ -21,7 +21,7 @@ library(rworldmap)
 library(usethis)
 library(ggwordcloud)
 library(colorspace)
-
+library(tableHTML)
 WN3 <- read.csv("WN3_v2.csv", stringsAsFactors = FALSE)
 x <- read_csv("colnames.csv")
 colnames(WN3) <- x$x
@@ -75,7 +75,10 @@ ui <- dashboardPage(skin = 'red',
                             hr(),
                             h3("Water-Related Research conducted by Belgian Actors"),
                             br(),
-                            h5("The Water Research Dashboard is an interactive platform centralizing, displaying and examining information about the water-related research that have involved at least one Belgian actor over the 2009 – 2019 period. So far, the water-related bibliographic data were extracted from the Scopus database – the largest abstract and citation database of peer-reviewed literature.")                        )
+                            h4("The Water Research Dashboard is an interactive platform centralizing, displaying and examining information about the water-related research that have involved at least one Belgian actor over the 2009 – 2019 period. 
+                               To analyze and evaluate the role of science, technology, and innovation in support of the development of the  water sector in Belgium, a bibliometric analysis was applied to investigate systematically publications targeting water sector with a wide spectrum of complementary expertise, from integrated water management, sanitation and hygiene, policy support for sustainable transitions natural resources governance and legal aspects, private sector development and valorization of research to data analytics and decision support systems for water and environmental management.
+                               Bibliometrics was first presented by Pritchard (1969), in which quantitative analyses and statistical measurements were applied on publications in order to gain a systematic, transparent, and reproducible review on the existing knowledge base, from that, allowed advancing research lines.")
+                            )
                     ),
                     fluidRow(
                         box(width = 12, 
@@ -83,21 +86,41 @@ ui <- dashboardPage(skin = 'red',
                             hr(),
                             h3("Bibliometrix analysis of water research conducted by Belgian Actors"),
                             br(),
-                            h5("We adapted the list of keywords that can be found in the water-related research. This list was proposed by",
+                            h4("Bibliographic data was collected on September 24, 2019, on the Scopus website (",
+                               a("www.scopus.com", href = "https://www.scopus.com"),
+                            "). Scopus database contains the largest international abstract and citation collection of peer-reviewed scientific literature. 
+                            Scopus currently indexes 22,800 titles (journals, magazines, reports) from more than 5,000 international publishers 
+                               We adapted the list of keywords that can be found in the water-related research. This list was proposed by",
                                a("Mehmood (2019)", href = "https://inweh.unu.edu/bibliometrics-of-water-research/"),
-                               "in the United Nations University-INWEH 2019. The final queries of 248 keywords were applied to download the citations and bibliographies directly in Scopus website as well as in open-source statistical software R using rscopus package.")
+                               "in the United Nations University-INWEH 2019. 
+                               The final queries of 248 keywords were applied to download the citations and bibliographies directly in Scopus website as well as in open-source statistical software R using rscopus package. 
+                               All types of publications were assessed for the following characteristics: document types and languages, publication outputs, research categories, authors, journals, countries, institutions, and keywords.
+                               ")
                         )
                     ),
                     fluidRow(
                         column(6,
-                               h1("Funded by"),
+                               h2("Funded by"),
                                img(style = "max-width:50%",
                                    src = "Logo2.jpg")
                         ),
-                        column(6, 
+                        column(6,
                                img(align = "left|bottom",
                                    style = "max-width:50%",
                                    src = "Logo.jpg") 
+                        )
+                    ),
+                    fluidRow(
+                        column(6,
+                               h2("Through"),
+                               box(
+                               img(style = "max-width:100%",
+                                   src = "Logo3.jpg")
+                               ),
+                               box(
+                               img(style = "max-width:100%",
+                                   src = "Logo4.png")
+                               )
                         )
                     )
             ), # end of About tabItem
