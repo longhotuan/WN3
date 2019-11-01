@@ -266,7 +266,7 @@ server <- function(input, output, session) {
         }
         
         valueBox(
-            value = nrow(selectedData),
+            value = prettyNum(nrow(selectedData), big.mark = ","),
             subtitle = "Total number of publication",
             icon = icon("newspaper"),
             color = "purple"
@@ -301,7 +301,7 @@ server <- function(input, output, session) {
         }
         selectedData_v3 <- selectedData[,first_country:last_country][, colSums(is.na(selectedData[,first_country:last_country])) < nrow(selectedData[,first_country:last_country])]
         valueBox(
-            value =ncol(selectedData_v3),
+            value = ncol(selectedData_v3),
             subtitle = "Total number of country",
             icon = icon("flag"),
             color = "yellow"
@@ -334,7 +334,7 @@ server <- function(input, output, session) {
             }
         }
         valueBox(
-            value = sum(selectedData$`Cited by`, na.rm = TRUE),
+            value =  prettyNum(sum(selectedData$`Cited by`, na.rm = TRUE), big.mark = ","),
             subtitle = "Total number of citation",
             icon = icon("file-signature"),
             color = "blue"
@@ -433,7 +433,7 @@ server <- function(input, output, session) {
             }
         }
         valueBox(
-            value = nlevels(as.factor(selectedData$`Source title`)),
+            value = prettyNum(nlevels(as.factor(selectedData$`Source title`)), big.mark = ","),
             subtitle = "Total number of journal",
             icon = icon("book"),
             color = "maroon"
@@ -468,7 +468,7 @@ server <- function(input, output, session) {
         }
         
         valueBox(
-            value = nrow(selectedData),
+            value = prettyNum(nrow(selectedData), big.mark = ","),
             subtitle = "Total number of publication",
             icon = icon("newspaper"),
             color = "purple"
@@ -536,7 +536,7 @@ server <- function(input, output, session) {
             }
         }
         valueBox(
-            value = sum(selectedData$`Cited by`, na.rm = TRUE),
+            value = prettyNum(sum(selectedData$`Cited by`, na.rm = TRUE), big.mark = ","),
             subtitle = "Total number of citation",
             icon = icon("file-signature"),
             color = "blue"
@@ -635,7 +635,7 @@ server <- function(input, output, session) {
             }
         }
         valueBox(
-            value = nlevels(as.factor(selectedData$`Source title`)),
+            value = prettyNum(nlevels(as.factor(selectedData$`Source title`)), big.mark = ","),
             subtitle = "Total number of journal",
             icon = icon("book"),
             color = "maroon"
@@ -670,7 +670,7 @@ server <- function(input, output, session) {
         }
         
         valueBox(
-            value = nrow(selectedData),
+            value = prettyNum(nrow(selectedData), big.mark = ","),
             subtitle = "Total number of publication",
             icon = icon("newspaper"),
             color = "purple"
@@ -738,7 +738,7 @@ server <- function(input, output, session) {
             }
         }
         valueBox(
-            value = sum(selectedData$`Cited by`, na.rm = TRUE),
+            value = prettyNum(sum(selectedData$`Cited by`, na.rm = TRUE), big.mark = ","),
             subtitle = "Total number of citation",
             icon = icon("file-signature"),
             color = "blue"
@@ -837,7 +837,7 @@ server <- function(input, output, session) {
             }
         }
         valueBox(
-            value = nlevels(as.factor(selectedData$`Source title`)),
+            value = prettyNum(nlevels(as.factor(selectedData$`Source title`)), big.mark = ","),
             subtitle = "Total number of journal",
             icon = icon("book"),
             color = "maroon"
