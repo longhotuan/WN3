@@ -214,9 +214,9 @@ server <- function(input, output, session) {
         if(df_country() == "All"){
             levels(as.factor(df()$Year))
         } else if(df_country() == "Partner countries"){
-            year1 <- df()[!is.na(df()[, which(colnames(df()) %in% c("Benin", "Burkina Faso", "Burundi", "Democratic Republic of the Congo", "Guinea", "Mali", "Morocco", 
-                                                                     "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]),]
-            year1 <- year1[complete.cases(year1[ , 1:3]),]
+            m <-df()[, which(colnames(df()) %in% c("Benin", "Burkina Faso", "Burundi", "DR Congo", "Guinea", "Mali", "Morocco", 
+                                                   "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]
+            year1 <- df()[rowSums(is.na(m)) != ncol(m), ]
             year2 <- levels(as.factor(year1$Year))
             year2
             
@@ -247,13 +247,15 @@ server <- function(input, output, session) {
             }
         } else if(df_country() == "Partner countries"){
             if (df_year() == "All") {
-                selectedData <- df()[!is.na(df()[, which(colnames(df()) %in% c("Benin", "Burkina Faso", "Burundi", "Democratic Republic of the Congo", "Guinea", "Mali", "Morocco", 
-                                                                                  "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]),]
+                m <-df()[, which(colnames(df()) %in% c("Benin", "Burkina Faso", "Burundi", "DR Congo", "Guinea", "Mali", "Morocco", 
+                                                       "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]
+                selectedData <- df()[rowSums(is.na(m)) != ncol(m), ]
                 selectedData <- selectedData[complete.cases(selectedData[ ,1:3]),]
             } else {
                 selectedData3 <- df() %>% filter(Year == df_year())
-                selectedData <- selectedData3[!is.na(selectedData3[, which(colnames(selectedData3) %in% c("Benin", "Burkina Faso", "Burundi", "Democratic Republic of the Congo", "Guinea", "Mali", "Morocco", 
-                                                                               "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]),]
+                m <-selectedData3[, which(colnames(selectedData3) %in% c("Benin", "Burkina Faso", "Burundi", "DR Congo", "Guinea", "Mali", "Morocco", 
+                                                       "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]
+                selectedData <- selectedData3[rowSums(is.na(m)) != ncol(m), ]
                 selectedData <- selectedData[complete.cases(selectedData[ ,1:3]),]
             }
         } else {
@@ -282,13 +284,15 @@ server <- function(input, output, session) {
             }
         } else if(df_country() == "Partner countries"){
             if (df_year() == "All") {
-                selectedData <- df()[!is.na(df()[, which(colnames(df()) %in% c("Benin", "Burkina Faso", "Burundi", "Democratic Republic of the Congo", "Guinea", "Mali", "Morocco", 
-                                                                               "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]),]
+                m <-df()[, which(colnames(df()) %in% c("Benin", "Burkina Faso", "Burundi", "DR Congo", "Guinea", "Mali", "Morocco", 
+                                                       "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]
+                selectedData <- df()[rowSums(is.na(m)) != ncol(m), ]
                 selectedData <- selectedData[complete.cases(selectedData[ ,1:3]),]
             } else {
                 selectedData3 <- df() %>% filter(Year == df_year())
-                selectedData <- selectedData3[!is.na(selectedData3[, which(colnames(selectedData3) %in% c("Benin", "Burkina Faso", "Burundi", "Democratic Republic of the Congo", "Guinea", "Mali", "Morocco", 
-                                                                                                          "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]),]
+                m <-selectedData3[, which(colnames(selectedData3) %in% c("Benin", "Burkina Faso", "Burundi", "DR Congo", "Guinea", "Mali", "Morocco", 
+                                                       "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]
+                selectedData <- selectedData3[rowSums(is.na(m)) != ncol(m), ]
                 selectedData <- selectedData[complete.cases(selectedData[ ,1:3]),]
             }
         } else {
@@ -316,13 +320,15 @@ server <- function(input, output, session) {
             }
         } else if(df_country() == "Partner countries"){
             if (df_year() == "All") {
-                selectedData <- df()[!is.na(df()[, which(colnames(df()) %in% c("Benin", "Burkina Faso", "Burundi", "Democratic Republic of the Congo", "Guinea", "Mali", "Morocco", 
-                                                                               "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]),]
+                m <-df()[, which(colnames(df()) %in% c("Benin", "Burkina Faso", "Burundi", "DR Congo", "Guinea", "Mali", "Morocco", 
+                                                       "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]
+                selectedData <- df()[rowSums(is.na(m)) != ncol(m), ]
                 selectedData <- selectedData[complete.cases(selectedData[ ,1:3]),]
             } else {
                 selectedData3 <- df() %>% filter(Year == df_year())
-                selectedData <- selectedData3[!is.na(selectedData3[, which(colnames(selectedData3) %in% c("Benin", "Burkina Faso", "Burundi", "Democratic Republic of the Congo", "Guinea", "Mali", "Morocco", 
-                                                                                                          "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]),]
+                m <-selectedData3[, which(colnames(selectedData3) %in% c("Benin", "Burkina Faso", "Burundi", "DR Congo", "Guinea", "Mali", "Morocco", 
+                                                       "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]
+                selectedData <- selectedData3[rowSums(is.na(m)) != ncol(m), ]
                 selectedData <- selectedData[complete.cases(selectedData[ ,1:3]),]
             }
         } else {
@@ -349,13 +355,15 @@ server <- function(input, output, session) {
             }
         } else if(df_country() == "Partner countries"){
             if (df_year() == "All") {
-                selectedData <- df()[!is.na(df()[, which(colnames(df()) %in% c("Benin", "Burkina Faso", "Burundi", "Democratic Republic of the Congo", "Guinea", "Mali", "Morocco", 
-                                                                               "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]),]
+                m <-df()[, which(colnames(df()) %in% c("Benin", "Burkina Faso", "Burundi", "DR Congo", "Guinea", "Mali", "Morocco", 
+                                                       "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]
+                selectedData <- df()[rowSums(is.na(m)) != ncol(m), ]
                 selectedData <- selectedData[complete.cases(selectedData[ ,1:3]),]
             } else {
                 selectedData3 <- df() %>% filter(Year == df_year())
-                selectedData <- selectedData3[!is.na(selectedData3[, which(colnames(selectedData3) %in% c("Benin", "Burkina Faso", "Burundi", "Democratic Republic of the Congo", "Guinea", "Mali", "Morocco", 
-                                                                                                          "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]),]
+                m <-selectedData3[, which(colnames(selectedData3) %in% c("Benin", "Burkina Faso", "Burundi", "DR Congo", "Guinea", "Mali", "Morocco", 
+                                                       "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]
+                selectedData <- selectedData3[rowSums(is.na(m)) != ncol(m), ]
                 selectedData <- selectedData[complete.cases(selectedData[ ,1:3]),]
             }
         } else {
@@ -382,13 +390,15 @@ server <- function(input, output, session) {
             }
         } else if(df_country() == "Partner countries"){
             if (df_year() == "All") {
-                selectedData <- df()[!is.na(df()[, which(colnames(df()) %in% c("Benin", "Burkina Faso", "Burundi", "Democratic Republic of the Congo", "Guinea", "Mali", "Morocco", 
-                                                                               "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]),]
+                m <-df()[, which(colnames(df()) %in% c("Benin", "Burkina Faso", "Burundi", "DR Congo", "Guinea", "Mali", "Morocco", 
+                                                       "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]
+                selectedData <- df()[rowSums(is.na(m)) != ncol(m), ]
                 selectedData <- selectedData[complete.cases(selectedData[ ,1:3]),]
             } else {
                 selectedData3 <- df() %>% filter(Year == df_year())
-                selectedData <- selectedData3[!is.na(selectedData3[, which(colnames(selectedData3) %in% c("Benin", "Burkina Faso", "Burundi", "Democratic Republic of the Congo", "Guinea", "Mali", "Morocco", 
-                                                                                                          "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]),]
+                m <-selectedData3[, which(colnames(selectedData3) %in% c("Benin", "Burkina Faso", "Burundi", "DR Congo", "Guinea", "Mali", "Morocco", 
+                                                       "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]
+                selectedData <- selectedData3[rowSums(is.na(m)) != ncol(m), ]
                 selectedData <- selectedData[complete.cases(selectedData[ ,1:3]),]
             }
         } else {
@@ -415,13 +425,15 @@ server <- function(input, output, session) {
             }
         } else if(df_country() == "Partner countries"){
             if (df_year() == "All") {
-                selectedData <- df()[!is.na(df()[, which(colnames(df()) %in% c("Benin", "Burkina Faso", "Burundi", "Democratic Republic of the Congo", "Guinea", "Mali", "Morocco", 
-                                                                               "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]),]
+                m <-df()[, which(colnames(df()) %in% c("Benin", "Burkina Faso", "Burundi", "DR Congo", "Guinea", "Mali", "Morocco", 
+                                                       "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]
+                selectedData <- df()[rowSums(is.na(m)) != ncol(m), ]
                 selectedData <- selectedData[complete.cases(selectedData[ ,1:3]),]
             } else {
                 selectedData3 <- df() %>% filter(Year == df_year())
-                selectedData <- selectedData3[!is.na(selectedData3[, which(colnames(selectedData3) %in% c("Benin", "Burkina Faso", "Burundi", "Democratic Republic of the Congo", "Guinea", "Mali", "Morocco", 
-                                                                                                          "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]),]
+                m <-selectedData3[, which(colnames(selectedData3) %in% c("Benin", "Burkina Faso", "Burundi", "DR Congo", "Guinea", "Mali", "Morocco", 
+                                                       "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]
+                selectedData <- selectedData3[rowSums(is.na(m)) != ncol(m), ]
                 selectedData <- selectedData[complete.cases(selectedData[ ,1:3]),]
             }
         } else {
@@ -449,13 +461,15 @@ server <- function(input, output, session) {
             }
         } else if(df_country() == "Partner countries"){
             if (df_year() == "All") {
-                selectedData <- df()[!is.na(df()[, which(colnames(df()) %in% c("Benin", "Burkina Faso", "Burundi", "Democratic Republic of the Congo", "Guinea", "Mali", "Morocco", 
-                                                                               "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]),]
+                m <-df()[, which(colnames(df()) %in% c("Benin", "Burkina Faso", "Burundi", "DR Congo", "Guinea", "Mali", "Morocco", 
+                                                       "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]
+                selectedData <- df()[rowSums(is.na(m)) != ncol(m), ]
                 selectedData <- selectedData[complete.cases(selectedData[ ,1:3]),]
             } else {
                 selectedData3 <- df() %>% filter(Year == df_year())
-                selectedData <- selectedData3[!is.na(selectedData3[, which(colnames(selectedData3) %in% c("Benin", "Burkina Faso", "Burundi", "Democratic Republic of the Congo", "Guinea", "Mali", "Morocco", 
-                                                                                                          "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]),]
+                m <-selectedData3[, which(colnames(selectedData3) %in% c("Benin", "Burkina Faso", "Burundi", "DR Congo", "Guinea", "Mali", "Morocco", 
+                                                       "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]
+                selectedData <- selectedData3[rowSums(is.na(m)) != ncol(m), ]
                 selectedData <- selectedData[complete.cases(selectedData[ ,1:3]),]
             }
         } else {
@@ -484,13 +498,15 @@ server <- function(input, output, session) {
             }
         } else if(df_country() == "Partner countries"){
             if (df_year() == "All") {
-                selectedData <- df()[!is.na(df()[, which(colnames(df()) %in% c("Benin", "Burkina Faso", "Burundi", "Democratic Republic of the Congo", "Guinea", "Mali", "Morocco", 
-                                                                               "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]),]
+                m <-df()[, which(colnames(df()) %in% c("Benin", "Burkina Faso", "Burundi", "DR Congo", "Guinea", "Mali", "Morocco", 
+                                                       "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]
+                selectedData <- df()[rowSums(is.na(m)) != ncol(m), ]
                 selectedData <- selectedData[complete.cases(selectedData[ ,1:3]),]
             } else {
                 selectedData3 <- df() %>% filter(Year == df_year())
-                selectedData <- selectedData3[!is.na(selectedData3[, which(colnames(selectedData3) %in% c("Benin", "Burkina Faso", "Burundi", "Democratic Republic of the Congo", "Guinea", "Mali", "Morocco", 
-                                                                                                          "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]),]
+                m <-selectedData3[, which(colnames(selectedData3) %in% c("Benin", "Burkina Faso", "Burundi", "DR Congo", "Guinea", "Mali", "Morocco", 
+                                                       "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]
+                selectedData <- selectedData3[rowSums(is.na(m)) != ncol(m), ]
                 selectedData <- selectedData[complete.cases(selectedData[ ,1:3]),]
             }
         } else {
@@ -518,13 +534,15 @@ server <- function(input, output, session) {
             }
         } else if(df_country() == "Partner countries"){
             if (df_year() == "All") {
-                selectedData <- df()[!is.na(df()[, which(colnames(df()) %in% c("Benin", "Burkina Faso", "Burundi", "Democratic Republic of the Congo", "Guinea", "Mali", "Morocco", 
-                                                                               "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]),]
+                m <-df()[, which(colnames(df()) %in% c("Benin", "Burkina Faso", "Burundi", "DR Congo", "Guinea", "Mali", "Morocco", 
+                                                       "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]
+                selectedData <- df()[rowSums(is.na(m)) != ncol(m), ]
                 selectedData <- selectedData[complete.cases(selectedData[ ,1:3]),]
             } else {
                 selectedData3 <- df() %>% filter(Year == df_year())
-                selectedData <- selectedData3[!is.na(selectedData3[, which(colnames(selectedData3) %in% c("Benin", "Burkina Faso", "Burundi", "Democratic Republic of the Congo", "Guinea", "Mali", "Morocco", 
-                                                                                                          "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]),]
+                m <-selectedData3[, which(colnames(selectedData3) %in% c("Benin", "Burkina Faso", "Burundi", "DR Congo", "Guinea", "Mali", "Morocco", 
+                                                       "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]
+                selectedData <- selectedData3[rowSums(is.na(m)) != ncol(m), ]
                 selectedData <- selectedData[complete.cases(selectedData[ ,1:3]),]
             }
         } else {
@@ -551,13 +569,15 @@ server <- function(input, output, session) {
             }
         } else if(df_country() == "Partner countries"){
             if (df_year() == "All") {
-                selectedData <- df()[!is.na(df()[, which(colnames(df()) %in% c("Benin", "Burkina Faso", "Burundi", "Democratic Republic of the Congo", "Guinea", "Mali", "Morocco", 
-                                                                               "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]),]
+                m <-df()[, which(colnames(df()) %in% c("Benin", "Burkina Faso", "Burundi", "DR Congo", "Guinea", "Mali", "Morocco", 
+                                                       "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]
+                selectedData <- df()[rowSums(is.na(m)) != ncol(m), ]
                 selectedData <- selectedData[complete.cases(selectedData[ ,1:3]),]
             } else {
                 selectedData3 <- df() %>% filter(Year == df_year())
-                selectedData <- selectedData3[!is.na(selectedData3[, which(colnames(selectedData3) %in% c("Benin", "Burkina Faso", "Burundi", "Democratic Republic of the Congo", "Guinea", "Mali", "Morocco", 
-                                                                                                          "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]),]
+                m <-selectedData3[, which(colnames(selectedData3) %in% c("Benin", "Burkina Faso", "Burundi", "DR Congo", "Guinea", "Mali", "Morocco", 
+                                                       "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]
+                selectedData <- selectedData3[rowSums(is.na(m)) != ncol(m), ]
                 selectedData <- selectedData[complete.cases(selectedData[ ,1:3]),]
             }
         } else {
@@ -584,13 +604,15 @@ server <- function(input, output, session) {
             }
         } else if(df_country() == "Partner countries"){
             if (df_year() == "All") {
-                selectedData <- df()[!is.na(df()[, which(colnames(df()) %in% c("Benin", "Burkina Faso", "Burundi", "Democratic Republic of the Congo", "Guinea", "Mali", "Morocco", 
-                                                                               "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]),]
+                m <-df()[, which(colnames(df()) %in% c("Benin", "Burkina Faso", "Burundi", "DR Congo", "Guinea", "Mali", "Morocco", 
+                                                       "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]
+                selectedData <- df()[rowSums(is.na(m)) != ncol(m), ]
                 selectedData <- selectedData[complete.cases(selectedData[ ,1:3]),]
             } else {
                 selectedData3 <- df() %>% filter(Year == df_year())
-                selectedData <- selectedData3[!is.na(selectedData3[, which(colnames(selectedData3) %in% c("Benin", "Burkina Faso", "Burundi", "Democratic Republic of the Congo", "Guinea", "Mali", "Morocco", 
-                                                                                                          "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]),]
+                m <-selectedData3[, which(colnames(selectedData3) %in% c("Benin", "Burkina Faso", "Burundi", "DR Congo", "Guinea", "Mali", "Morocco", 
+                                                       "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]
+                selectedData <- selectedData3[rowSums(is.na(m)) != ncol(m), ]
                 selectedData <- selectedData[complete.cases(selectedData[ ,1:3]),]
             }
         } else {
@@ -617,13 +639,15 @@ server <- function(input, output, session) {
             }
         } else if(df_country() == "Partner countries"){
             if (df_year() == "All") {
-                selectedData <- df()[!is.na(df()[, which(colnames(df()) %in% c("Benin", "Burkina Faso", "Burundi", "Democratic Republic of the Congo", "Guinea", "Mali", "Morocco", 
-                                                                               "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]),]
+                m <-df()[, which(colnames(df()) %in% c("Benin", "Burkina Faso", "Burundi", "DR Congo", "Guinea", "Mali", "Morocco", 
+                                                       "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]
+                selectedData <- df()[rowSums(is.na(m)) != ncol(m), ]
                 selectedData <- selectedData[complete.cases(selectedData[ ,1:3]),]
             } else {
                 selectedData3 <- df() %>% filter(Year == df_year())
-                selectedData <- selectedData3[!is.na(selectedData3[, which(colnames(selectedData3) %in% c("Benin", "Burkina Faso", "Burundi", "Democratic Republic of the Congo", "Guinea", "Mali", "Morocco", 
-                                                                                                          "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]),]
+                m <-selectedData3[, which(colnames(selectedData3) %in% c("Benin", "Burkina Faso", "Burundi", "DR Congo", "Guinea", "Mali", "Morocco", 
+                                                       "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]
+                selectedData <- selectedData3[rowSums(is.na(m)) != ncol(m), ]
                 selectedData <- selectedData[complete.cases(selectedData[ ,1:3]),]
             }
         } else {
@@ -651,13 +675,15 @@ server <- function(input, output, session) {
             }
         } else if(df_country() == "Partner countries"){
             if (df_year() == "All") {
-                selectedData <- df()[!is.na(df()[, which(colnames(df()) %in% c("Benin", "Burkina Faso", "Burundi", "Democratic Republic of the Congo", "Guinea", "Mali", "Morocco", 
-                                                                               "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]),]
+                m <-df()[, which(colnames(df()) %in% c("Benin", "Burkina Faso", "Burundi", "DR Congo", "Guinea", "Mali", "Morocco", 
+                                                       "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]
+                selectedData <- df()[rowSums(is.na(m)) != ncol(m), ]
                 selectedData <- selectedData[complete.cases(selectedData[ ,1:3]),]
             } else {
                 selectedData3 <- df() %>% filter(Year == df_year())
-                selectedData <- selectedData3[!is.na(selectedData3[, which(colnames(selectedData3) %in% c("Benin", "Burkina Faso", "Burundi", "Democratic Republic of the Congo", "Guinea", "Mali", "Morocco", 
-                                                                                                          "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]),]
+                m <-selectedData3[, which(colnames(selectedData3) %in% c("Benin", "Burkina Faso", "Burundi", "DR Congo", "Guinea", "Mali", "Morocco", 
+                                                       "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]
+                selectedData <- selectedData3[rowSums(is.na(m)) != ncol(m), ]
                 selectedData <- selectedData[complete.cases(selectedData[ ,1:3]),]
             }
         } else {
@@ -720,13 +746,15 @@ server <- function(input, output, session) {
             }
         } else if(df_country() == "Partner countries"){
             if (df_year() == "All") {
-                selectedData <- df()[!is.na(df()[, which(colnames(df()) %in% c("Benin", "Burkina Faso", "Burundi", "Democratic Republic of the Congo", "Guinea", "Mali", "Morocco", 
-                                                                               "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]),]
+                m <-df()[, which(colnames(df()) %in% c("Benin", "Burkina Faso", "Burundi", "DR Congo", "Guinea", "Mali", "Morocco", 
+                                                       "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]
+                selectedData <- df()[rowSums(is.na(m)) != ncol(m), ]
                 selectedData <- selectedData[complete.cases(selectedData[ ,1:3]),]
             } else {
                 selectedData3 <- df() %>% filter(Year == df_year())
-                selectedData <- selectedData3[!is.na(selectedData3[, which(colnames(selectedData3) %in% c("Benin", "Burkina Faso", "Burundi", "Democratic Republic of the Congo", "Guinea", "Mali", "Morocco", 
-                                                                                                          "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]),]
+                m <-selectedData3[, which(colnames(selectedData3) %in% c("Benin", "Burkina Faso", "Burundi", "DR Congo", "Guinea", "Mali", "Morocco", 
+                                                       "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]
+                selectedData <- selectedData3[rowSums(is.na(m)) != ncol(m), ]
                 selectedData <- selectedData[complete.cases(selectedData[ ,1:3]),]
             }
         } else {
@@ -753,13 +781,15 @@ server <- function(input, output, session) {
             }
         } else if(df_country() == "Partner countries"){
             if (df_year() == "All") {
-                selectedData <- df()[!is.na(df()[, which(colnames(df()) %in% c("Benin", "Burkina Faso", "Burundi", "Democratic Republic of the Congo", "Guinea", "Mali", "Morocco", 
-                                                                               "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]),]
+                m <-df()[, which(colnames(df()) %in% c("Benin", "Burkina Faso", "Burundi", "DR Congo", "Guinea", "Mali", "Morocco", 
+                                                       "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]
+                selectedData <- df()[rowSums(is.na(m)) != ncol(m), ]
                 selectedData <- selectedData[complete.cases(selectedData[ ,1:3]),]
             } else {
                 selectedData3 <- df() %>% filter(Year == df_year())
-                selectedData <- selectedData3[!is.na(selectedData3[, which(colnames(selectedData3) %in% c("Benin", "Burkina Faso", "Burundi", "Democratic Republic of the Congo", "Guinea", "Mali", "Morocco", 
-                                                                                                          "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]),]
+                m <-selectedData3[, which(colnames(selectedData3) %in% c("Benin", "Burkina Faso", "Burundi", "DR Congo", "Guinea", "Mali", "Morocco", 
+                                                       "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]
+                selectedData <- selectedData3[rowSums(is.na(m)) != ncol(m), ]
                 selectedData <- selectedData[complete.cases(selectedData[ ,1:3]),]
             }
         } else {
@@ -786,13 +816,15 @@ server <- function(input, output, session) {
             }
         } else if(df_country() == "Partner countries"){
             if (df_year() == "All") {
-                selectedData <- df()[!is.na(df()[, which(colnames(df()) %in% c("Benin", "Burkina Faso", "Burundi", "Democratic Republic of the Congo", "Guinea", "Mali", "Morocco", 
-                                                                               "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]),]
+                m <-df()[, which(colnames(df()) %in% c("Benin", "Burkina Faso", "Burundi", "DR Congo", "Guinea", "Mali", "Morocco", 
+                                                       "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]
+                selectedData <- df()[rowSums(is.na(m)) != ncol(m), ]
                 selectedData <- selectedData[complete.cases(selectedData[ ,1:3]),]
             } else {
                 selectedData3 <- df() %>% filter(Year == df_year())
-                selectedData <- selectedData3[!is.na(selectedData3[, which(colnames(selectedData3) %in% c("Benin", "Burkina Faso", "Burundi", "Democratic Republic of the Congo", "Guinea", "Mali", "Morocco", 
-                                                                                                          "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]),]
+                m <-selectedData3[, which(colnames(selectedData3) %in% c("Benin", "Burkina Faso", "Burundi", "DR Congo", "Guinea", "Mali", "Morocco", 
+                                                       "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]
+                selectedData <- selectedData3[rowSums(is.na(m)) != ncol(m), ]
                 selectedData <- selectedData[complete.cases(selectedData[ ,1:3]),]
             }
         } else {
@@ -819,13 +851,15 @@ server <- function(input, output, session) {
             }
         } else if(df_country() == "Partner countries"){
             if (df_year() == "All") {
-                selectedData <- df()[!is.na(df()[, which(colnames(df()) %in% c("Benin", "Burkina Faso", "Burundi", "Democratic Republic of the Congo", "Guinea", "Mali", "Morocco", 
-                                                                               "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]),]
+                m <-df()[, which(colnames(df()) %in% c("Benin", "Burkina Faso", "Burundi", "DR Congo", "Guinea", "Mali", "Morocco", 
+                                                       "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]
+                selectedData <- df()[rowSums(is.na(m)) != ncol(m), ]
                 selectedData <- selectedData[complete.cases(selectedData[ ,1:3]),]
             } else {
                 selectedData3 <- df() %>% filter(Year == df_year())
-                selectedData <- selectedData3[!is.na(selectedData3[, which(colnames(selectedData3) %in% c("Benin", "Burkina Faso", "Burundi", "Democratic Republic of the Congo", "Guinea", "Mali", "Morocco", 
-                                                                                                          "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]),]
+                m <-selectedData3[, which(colnames(selectedData3) %in% c("Benin", "Burkina Faso", "Burundi", "DR Congo", "Guinea", "Mali", "Morocco", 
+                                                       "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]
+                selectedData <- selectedData3[rowSums(is.na(m)) != ncol(m), ]
                 selectedData <- selectedData[complete.cases(selectedData[ ,1:3]),]
             }
         } else {
@@ -853,13 +887,15 @@ server <- function(input, output, session) {
             }
         } else if(df_country() == "Partner countries"){
             if (df_year() == "All") {
-                selectedData <- df()[!is.na(df()[, which(colnames(df()) %in% c("Benin", "Burkina Faso", "Burundi", "Democratic Republic of the Congo", "Guinea", "Mali", "Morocco", 
-                                                                               "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]),]
+                m <-df()[, which(colnames(df()) %in% c("Benin", "Burkina Faso", "Burundi", "DR Congo", "Guinea", "Mali", "Morocco", 
+                                                       "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]
+                selectedData <- df()[rowSums(is.na(m)) != ncol(m), ]
                 selectedData <- selectedData[complete.cases(selectedData[ ,1:3]),]
             } else {
                 selectedData3 <- df() %>% filter(Year == df_year())
-                selectedData <- selectedData3[!is.na(selectedData3[, which(colnames(selectedData3) %in% c("Benin", "Burkina Faso", "Burundi", "Democratic Republic of the Congo", "Guinea", "Mali", "Morocco", 
-                                                                                                          "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]),]
+                m <-selectedData3[, which(colnames(selectedData3) %in% c("Benin", "Burkina Faso", "Burundi", "DR Congo", "Guinea", "Mali", "Morocco", 
+                                                       "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]
+                selectedData <- selectedData3[rowSums(is.na(m)) != ncol(m), ]
                 selectedData <- selectedData[complete.cases(selectedData[ ,1:3]),]
             }
         } else {
@@ -874,7 +910,7 @@ server <- function(input, output, session) {
                                          "Document Type", "DOI")]
         
         DT::datatable({DT::datatable(data_selected)
-            data_selected$DOI <- paste0("<a href='",data_selected$DOI,"' target='_blank'>",data_selected$DOI,"</a>")
+            data_selected$DOI <- paste0("<a href='", "https://doi.org/", data_selected$DOI,"' target='_blank'>", "https://doi.org/", data_selected$DOI,"</a>")
             data_selected
         }, escape = FALSE,
         filter="top", 
@@ -897,13 +933,15 @@ server <- function(input, output, session) {
             }
         } else if(df_country() == "Partner countries"){
             if (df_year() == "All") {
-                selectedData <- df()[!is.na(df()[, which(colnames(df()) %in% c("Benin", "Burkina Faso", "Burundi", "Democratic Republic of the Congo", "Guinea", "Mali", "Morocco", 
-                                                                               "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]),]
+                m <-df()[, which(colnames(df()) %in% c("Benin", "Burkina Faso", "Burundi", "DR Congo", "Guinea", "Mali", "Morocco", 
+                                                       "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]
+                selectedData <- df()[rowSums(is.na(m)) != ncol(m), ]
                 selectedData <- selectedData[complete.cases(selectedData[ ,1:3]),]
             } else {
                 selectedData3 <- df() %>% filter(Year == df_year())
-                selectedData <- selectedData3[!is.na(selectedData3[, which(colnames(selectedData3) %in% c("Benin", "Burkina Faso", "Burundi", "Democratic Republic of the Congo", "Guinea", "Mali", "Morocco", 
-                                                                                                          "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]),]
+                m <-selectedData3[, which(colnames(selectedData3) %in% c("Benin", "Burkina Faso", "Burundi", "DR Congo", "Guinea", "Mali", "Morocco", 
+                                                       "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]
+                selectedData <- selectedData3[rowSums(is.na(m)) != ncol(m), ]
                 selectedData <- selectedData[complete.cases(selectedData[ ,1:3]),]
             }
         } else {
@@ -961,13 +999,15 @@ server <- function(input, output, session) {
             }
         } else if(df_country() == "Partner countries"){
             if (df_year() == "All") {
-                selectedData <- df()[!is.na(df()[, which(colnames(df()) %in% c("Benin", "Burkina Faso", "Burundi", "Democratic Republic of the Congo", "Guinea", "Mali", "Morocco", 
-                                                                               "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]),]
+                m <-df()[, which(colnames(df()) %in% c("Benin", "Burkina Faso", "Burundi", "DR Congo", "Guinea", "Mali", "Morocco", 
+                                                       "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]
+                selectedData <- df()[rowSums(is.na(m)) != ncol(m), ]
                 selectedData <- selectedData[complete.cases(selectedData[ ,1:3]),]
             } else {
                 selectedData3 <- df() %>% filter(Year == df_year())
-                selectedData <- selectedData3[!is.na(selectedData3[, which(colnames(selectedData3) %in% c("Benin", "Burkina Faso", "Burundi", "Democratic Republic of the Congo", "Guinea", "Mali", "Morocco", 
-                                                                                                          "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]),]
+                m <-selectedData3[, which(colnames(selectedData3) %in% c("Benin", "Burkina Faso", "Burundi", "DR Congo", "Guinea", "Mali", "Morocco", 
+                                                       "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]
+                selectedData <- selectedData3[rowSums(is.na(m)) != ncol(m), ]
                 selectedData <- selectedData[complete.cases(selectedData[ ,1:3]),]
             }
         } else {
@@ -1007,13 +1047,15 @@ server <- function(input, output, session) {
             }
         } else if(df_country() == "Partner countries"){
             if (df_year() == "All") {
-                selectedData <- df()[!is.na(df()[, which(colnames(df()) %in% c("Benin", "Burkina Faso", "Burundi", "Democratic Republic of the Congo", "Guinea", "Mali", "Morocco", 
-                                                                               "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]),]
+                m <-df()[, which(colnames(df()) %in% c("Benin", "Burkina Faso", "Burundi", "DR Congo", "Guinea", "Mali", "Morocco", 
+                                                       "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]
+                selectedData <- df()[rowSums(is.na(m)) != ncol(m), ]
                 selectedData <- selectedData[complete.cases(selectedData[ ,1:3]),]
             } else {
                 selectedData3 <- df() %>% filter(Year == df_year())
-                selectedData <- selectedData3[!is.na(selectedData3[, which(colnames(selectedData3) %in% c("Benin", "Burkina Faso", "Burundi", "Democratic Republic of the Congo", "Guinea", "Mali", "Morocco", 
-                                                                                                          "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]),]
+                m <-selectedData3[, which(colnames(selectedData3) %in% c("Benin", "Burkina Faso", "Burundi", "DR Congo", "Guinea", "Mali", "Morocco", 
+                                                       "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]
+                selectedData <- selectedData3[rowSums(is.na(m)) != ncol(m), ]
                 selectedData <- selectedData[complete.cases(selectedData[ ,1:3]),]
             }
         } else {
@@ -1031,7 +1073,7 @@ server <- function(input, output, session) {
         WN_OA2 <- WN_OA[1:11,]
         WN_OA2$`Open Access` <- round(WN_OA2$n*100/(WN_OA[12:22,]$n+WN_OA2$n), 2)
         
-        ggplotly(ggplot(WN_OA2, aes(x = Year,  y = `Open Access`)) +
+        ggplotly(ggplot(WN_OA2, aes(x = Year,  y = `Open Access`, color = 'tomato')) +
                      geom_point(size = 2, color = 'tomato')+
                      geom_line(size = 1.1125, color = 'tomato')+
                      theme_bw() +
@@ -1053,13 +1095,15 @@ server <- function(input, output, session) {
             }
         } else if(df_country() == "Partner countries"){
             if (df_year() == "All") {
-                selectedData <- df()[!is.na(df()[, which(colnames(df()) %in% c("Benin", "Burkina Faso", "Burundi", "Democratic Republic of the Congo", "Guinea", "Mali", "Morocco", 
-                                                                               "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]),]
+                m <-df()[, which(colnames(df()) %in% c("Benin", "Burkina Faso", "Burundi", "DR Congo", "Guinea", "Mali", "Morocco", 
+                                                       "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]
+                selectedData <- df()[rowSums(is.na(m)) != ncol(m), ]
                 selectedData <- selectedData[complete.cases(selectedData[ ,1:3]),]
             } else {
                 selectedData3 <- df() %>% filter(Year == df_year())
-                selectedData <- selectedData3[!is.na(selectedData3[, which(colnames(selectedData3) %in% c("Benin", "Burkina Faso", "Burundi", "Democratic Republic of the Congo", "Guinea", "Mali", "Morocco", 
-                                                                                                          "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]),]
+                m <-selectedData3[, which(colnames(selectedData3) %in% c("Benin", "Burkina Faso", "Burundi", "DR Congo", "Guinea", "Mali", "Morocco", 
+                                                       "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]
+                selectedData <- selectedData3[rowSums(is.na(m)) != ncol(m), ]
                 selectedData <- selectedData[complete.cases(selectedData[ ,1:3]),]
             }
         } else {
@@ -1098,13 +1142,15 @@ server <- function(input, output, session) {
             }
         } else if(df_country() == "Partner countries"){
             if (df_year() == "All") {
-                selectedData <- df()[!is.na(df()[, which(colnames(df()) %in% c("Benin", "Burkina Faso", "Burundi", "Democratic Republic of the Congo", "Guinea", "Mali", "Morocco", 
-                                                                               "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]),]
+                m <-df()[, which(colnames(df()) %in% c("Benin", "Burkina Faso", "Burundi", "DR Congo", "Guinea", "Mali", "Morocco", 
+                                                       "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]
+                selectedData <- df()[rowSums(is.na(m)) != ncol(m), ]
                 selectedData <- selectedData[complete.cases(selectedData[ ,1:3]),]
             } else {
                 selectedData3 <- df() %>% filter(Year == df_year())
-                selectedData <- selectedData3[!is.na(selectedData3[, which(colnames(selectedData3) %in% c("Benin", "Burkina Faso", "Burundi", "Democratic Republic of the Congo", "Guinea", "Mali", "Morocco", 
-                                                                                                          "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]),]
+                m <-selectedData3[, which(colnames(selectedData3) %in% c("Benin", "Burkina Faso", "Burundi", "DR Congo", "Guinea", "Mali", "Morocco", 
+                                                       "Mozambique", "Niger", "Uganda", "Palestine", "Rwanda", "Senegal", "Tanzania"))]
+                selectedData <- selectedData3[rowSums(is.na(m)) != ncol(m), ]
                 selectedData <- selectedData[complete.cases(selectedData[ ,1:3]),]
             }
         } else {
