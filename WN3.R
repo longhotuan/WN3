@@ -1,5 +1,5 @@
 #### Global R ####
-
+library(scales)
 library(knitr)
 library(rmarkdown)
 library(tidyverse)
@@ -90,26 +90,35 @@ ui <- dashboardPage(skin = 'red',
                             hr(),
                             h3("Water-Related Research conducted by Belgian Actors"),
                             br(),
-                            h4("The Water Research Dashboard is an interactive platform centralizing, displaying and examining information about the water-related research that have involved at least one Belgian actor over the 2009 – 2019 period. 
+                            h4("The Water Research Dashboard is an interactive platform centralizing, displaying and examining information about the water-related research that have involved at least one Belgian actor over the 1926 – 2019 period. 
                                To analyze and evaluate the role of science, technology, and innovation in support of the development of the  water sector in Belgium, a bibliometric analysis was applied to investigate systematically publications targeting water sector with a wide spectrum of complementary expertise, from integrated water management, sanitation and hygiene, policy support for sustainable transitions natural resources governance and legal aspects, private sector development and valorization of research to data analytics and decision support systems for water and environmental management.
                                Bibliometrics was first presented by Pritchard (1969), in which quantitative analyses and statistical measurements were applied on publications in order to gain a systematic, transparent, and reproducible review on the existing knowledge base, from that, allowed advancing research lines.")
                             )
                     ),
                     fluidRow(
                         box(width = 12, 
-                            h2("About the dataset"),
+                            h2("Abstract"),
                             hr(),
-                            h3("Bibliometrix analysis of water research conducted by Belgian Actors"),
+                            h3("Belgian Water Research in support of the Sustainable Development Goal 6"),
                             br(),
-                            h4("Bibliographic data was collected on September 24, 2019, on the Scopus website (",
+                            h4("Reaching the Sustainable Development Goal (SDG) 6 on water and sanitation is fundamentally important and conditional to the achievement of all the other SDGs. Nonetheless, achieving this goal by 2030 is challenging and compromised, especially in the Global South. Science lies at the root of sustainable development and is a key of new solutions for addressing SDG 6. However, research outputs linked to SDG 6 are often unknown, forming disconnections between academic world and practitioners implementing solutions. This study proposed a method that can systematically explore scientific literature to qualitatively and quantitatively characterize the contribution of water research to the achievement of SDG 6 and its targets using bibliometric analysis. The method was applied for water research produced by Belgian-affiliated authors with a focus on the research co-conducted with authors from the Global South. Despite accounting for less than one percent of the total global publications, Belgian water research has had a relatively high publication rate compared to its neighboring countries. We observed high and longstanding collaborations between Belgian and scientists from worldwide countries, and a notably increasing collaboration rate with countries from the Global South. The main hotspots for Belgian water research are water treatment, water stress, water pollution, climate change, and water modelling. The biggest share of the publication body has focused on topics related to the target 6.3, 6.4, 6.5, and 6.6. However, keywords analysis also highlighted that a great scientific attention has been paid to optimize water treatment with advanced bio- and nanotechnologies, and integrated modeling, which have contributed to the achievement the targets 6.1 and 6.2 in Belgium. Despite great concerns of Belgian water research about water scarcity, Belgium is still struggling to achieve the target 6.4 related to water stress. High similarities of research hotspots between Belgian water research and Belgium-Global South water research were observed. Still, differences in scientific interests can be found, such as water pollution and sanitation problems in agriculture and irrigation in Belgium-Global South water research. The publication lists resulting from the bibliometric search have been integrated in a dashboard for easy identification of research and experts by practitioners and policy makers. The findings and dashboard are important not only for optimizing the SDG related science but also for shaping the Belgian cooperation and development policy in the water sector, and for creating appropriate synergies between Belgian water researchers and their counterparts in the Global South.
+                               ")
+                        )
+                    ),
+                    fluidRow(
+                        box(width = 12, 
+                            h2("Methodology"),
+                            hr(),
+                            h3("Bibliometric analysis of Belgian water research"),
+                            br(),
+                            h4("Bibliographic data was collected on December 14, 2019, on the Scopus website (",
                                a("www.scopus.com", href = "https://www.scopus.com"),
                             "). Scopus database contains the largest international abstract and citation collection of peer-reviewed scientific literature. 
-                            Scopus currently indexes 22,800 titles (journals, magazines, reports) from more than 5,000 international publishers 
-                               We adapted the list of keywords that can be found in the water-related research. This list was proposed by",
-                               a("Mehmood (2019)", href = "https://inweh.unu.edu/bibliometrics-of-water-research/"),
-                               "in the United Nations University-INWEH 2019. 
-                               The final queries of 248 keywords were applied to download the citations and bibliographies directly in Scopus website as well as in open-source statistical software R using rscopus package. 
-                               All types of publications were assessed for the following characteristics: document types and languages, publication outputs, research categories, authors, journals, countries, institutions, and keywords.
+                            Scopus currently indexes 24,600 titles (journals, magazines, reports) from more than 5,000 international publishers 
+                               To select publications related to SDG 6, we first built a list of relevant filtering terms. We started with an initial list of 1,057 terms proposed for the bibliometric analysis of water research by",
+                               a("the United Nations University", href = "https://inweh.unu.edu/bibliometrics-of-water-research/"),
+                               ". To address some inconsistencies and adapt the list to a list of terms solely related to SDG 6 and its targets, we conducted a three steps adaptation procedure. In the first step, we eliminated terms because of their irrelevance based on five criteria (off-topic, too general, too specific, redundant, duplicated term). Details regarding these criteria can be found in the Supplementary Material A. In a second step, the remaining terms were categorized into the eight targets of SDG 6. When necessary, additional terms were added to fully capture the theme addressed by the targets. The selection of new terms was based on the definitions of the targets and their indicators. Importantly, a term could be categorized into multiple targets. For example, ‘wastewater’ was considered for both targets 6.3 and 6.4. Also noteworthy is that given the broad implications of integrated water resources management (IWRM) tackled by target 6.5, a wide range of terms were chosen, such as terms linked with hydrology, water resources, and water modeling. The first and second steps were implemented by three water professionals separately and then compiled into a single list. We discussed the terms for which there was a disagreement among the three scientists and made decisions on a case-by-case basis. In the final step, the chosen terms for SDG 6 and its targets were assessed and revised by two senior researchers with extended experience in the water sector. 
+                               The final lists of terms for SDG 6 and its targets can be found in Ho, L., et al. (2020) Belgian Water Research in support of the Sustainable Development Goal 6. Journal of cleaner Production (submitted).
                                ")
                         )
                     ),
@@ -178,13 +187,13 @@ ui <- dashboardPage(skin = 'red',
                     ),
                     fluidRow(
                         box(width = 12,
-                            title = "Top most frequent journals",
+                            title = "Top 20 most frequent publishers publishing publications of Belgian water research",
                             plotlyOutput("topjournal")
                         )
                     ),
                     fluidRow(
                         box(width = 12,
-                            title = "Open Access", 
+                            title = "Proportion of open access pulications of Belgian water research", 
                             plotlyOutput("Openaccess")
                         )
                     )
@@ -202,12 +211,12 @@ ui <- dashboardPage(skin = 'red',
                         valueBoxOutput("Totaljournal2")
                     ),
                     fluidRow(
-                        box(title = "Publication Year", width = 12,
+                        box(title = "Number of Belgian water research over time", width = 12,
                             plotlyOutput("Pubyear")
                         )
                     ),
                     fluidRow(
-                        box(title = "Top keywords", width = 12,
+                        box(title = "Word cloud of the most common author keywords in Belgian water research", width = 12,
                             plotOutput("Topkw")
                         )
                     )
@@ -387,7 +396,7 @@ server <- function(input, output, session) {
         
         valueBox(
             value = prettyNum(nrow(selecteddata), big.mark = ","),
-            subtitle = "Total number of publication",
+            subtitle = "Total number of publications",
             icon = icon("newspaper"),
             color = "purple"
         )
@@ -488,7 +497,7 @@ server <- function(input, output, session) {
         selecteddata_v3 <- selecteddata[,first_country:last_country][, colSums(is.na(selecteddata[,first_country:last_country])) < nrow(selecteddata[,first_country:last_country])]
         valueBox(
             value = ncol(selecteddata_v3),
-            subtitle = "Total number of country",
+            subtitle = "Total number of countries",
             icon = icon("flag"),
             color = "yellow"
         )
@@ -589,7 +598,7 @@ server <- function(input, output, session) {
         
         valueBox(
             value =  prettyNum(sum(selecteddata$`Cited by`, na.rm = TRUE), big.mark = ","),
-            subtitle = "Total number of citation",
+            subtitle = "Total number of citations",
             icon = icon("file-signature"),
             color = "blue"
         )
@@ -690,7 +699,7 @@ server <- function(input, output, session) {
         
         valueBox(
             value = length(levels(as.factor(selecteddata$`Document Type`))),
-            subtitle = "Document type",
+            subtitle = "Document types",
             icon = icon("folder-open"),
             color = "red"
         )
@@ -791,7 +800,7 @@ server <- function(input, output, session) {
         
         valueBox(
             value = round(sum(!is.na(selecteddata$`Access Type`))*100/(sum(is.na(selecteddata$`Access Type`))+sum(!is.na(selecteddata$`Access Type`))), digits = 2),
-            subtitle = "Percentage of open-access publication",
+            subtitle = "Percentage of open-access publications",
             icon = icon("lock-open"),
             color = "purple"
         )
@@ -892,7 +901,7 @@ server <- function(input, output, session) {
         
         valueBox(
             value = prettyNum(nlevels(as.factor(selecteddata$`Source title`)), big.mark = ","),
-            subtitle = "Total number of journal",
+            subtitle = "Total number of journals",
             icon = icon("book"),
             color = "maroon"
         )
@@ -994,7 +1003,7 @@ server <- function(input, output, session) {
 
         valueBox(
             value = prettyNum(nrow(selecteddata), big.mark = ","),
-            subtitle = "Total number of publication",
+            subtitle = "Total number of publications",
             icon = icon("newspaper"),
             color = "purple"
         )
@@ -1096,7 +1105,7 @@ server <- function(input, output, session) {
         selecteddata_v3 <- selecteddata[,first_country:last_country][, colSums(is.na(selecteddata[,first_country:last_country])) < nrow(selecteddata[,first_country:last_country])]
         valueBox(
             value =ncol(selecteddata_v3),
-            subtitle = "Total number of country",
+            subtitle = "Total number of countries",
             icon = icon("flag"),
             color = "yellow"
         )
@@ -1197,7 +1206,7 @@ server <- function(input, output, session) {
 
         valueBox(
             value = prettyNum(sum(selecteddata$`Cited by`, na.rm = TRUE), big.mark = ","),
-            subtitle = "Total number of citation",
+            subtitle = "Total number of citations",
             icon = icon("file-signature"),
             color = "blue"
         )
@@ -1298,7 +1307,7 @@ server <- function(input, output, session) {
 
         valueBox(
             value = length(levels(as.factor(selecteddata$`Document Type`))),
-            subtitle = "Document type",
+            subtitle = "Document types",
             icon = icon("folder-open"),
             color = "red"
         )
@@ -1399,7 +1408,7 @@ server <- function(input, output, session) {
 
         valueBox(
             value = round(sum(!is.na(selecteddata$`Access Type`))*100/(sum(is.na(selecteddata$`Access Type`))+sum(!is.na(selecteddata$`Access Type`))), digits = 2),
-            subtitle = "Percentage of open-access publication",
+            subtitle = "Percentage of open-access publications",
             icon = icon("lock-open"),
             color = "purple"
         )
@@ -1500,7 +1509,7 @@ server <- function(input, output, session) {
 
         valueBox(
             value = prettyNum(nlevels(as.factor(selecteddata$`Source title`)), big.mark = ","),
-            subtitle = "Total number of journal",
+            subtitle = "Total number of journals",
             icon = icon("book"),
             color = "maroon"
         )
@@ -1602,7 +1611,7 @@ server <- function(input, output, session) {
 
         valueBox(
             value = prettyNum(nrow(selecteddata), big.mark = ","),
-            subtitle = "Total number of publication",
+            subtitle = "Total number of publications",
             icon = icon("newspaper"),
             color = "purple"
         )
@@ -1704,7 +1713,7 @@ server <- function(input, output, session) {
         selecteddata_v3 <- selecteddata[,first_country:last_country][, colSums(is.na(selecteddata[,first_country:last_country])) < nrow(selecteddata[,first_country:last_country])]
         valueBox(
             value =ncol(selecteddata_v3),
-            subtitle = "Total number of country",
+            subtitle = "Total number of countries",
             icon = icon("flag"),
             color = "yellow"
         )
@@ -1805,7 +1814,7 @@ server <- function(input, output, session) {
 
         valueBox(
             value = prettyNum(sum(selecteddata$`Cited by`, na.rm = TRUE), big.mark = ","),
-            subtitle = "Total number of citation",
+            subtitle = "Total number of citations",
             icon = icon("file-signature"),
             color = "blue"
         )
@@ -1906,7 +1915,7 @@ server <- function(input, output, session) {
 
         valueBox(
             value = length(levels(as.factor(selecteddata$`Document Type`))),
-            subtitle = "Document type",
+            subtitle = "Document types",
             icon = icon("folder-open"),
             color = "red"
         )
@@ -2007,7 +2016,7 @@ server <- function(input, output, session) {
 
         valueBox(
             value = round(sum(!is.na(selecteddata$`Access Type`))*100/(sum(is.na(selecteddata$`Access Type`))+sum(!is.na(selecteddata$`Access Type`))), digits = 2),
-            subtitle = "Percentage of open-access publication",
+            subtitle = "Percentage of open-access publications",
             icon = icon("lock-open"),
             color = "purple"
         )
@@ -2108,125 +2117,135 @@ server <- function(input, output, session) {
 
         valueBox(
             value = prettyNum(nlevels(as.factor(selecteddata$`Source title`)), big.mark = ","),
-            subtitle = "Total number of journal",
+            subtitle = "Total number of journals",
             icon = icon("book"),
             color = "maroon"
         )
     })
-    # # Output table in Info tab ####
-    # output$table <- DT::renderDataTable(server = FALSE, {
-    #     if (df_target() == "All"){
-    #         target_chosen <- df()
-    #         if(df_country() == "All"){
-    #             country_chosen <- target_chosen
-    #             if(df_year() == "All"){
-    #                 selecteddata <- country_chosen
-    #             } else if (df_year() == "From 2010 to 2019"){
-    #                 selecteddata <- country_chosen %>% filter(Year <= 2019 & Year >= 2010)
-    #             } else if (df_year() == "From 2000 to 2009"){
-    #                 selecteddata <- country_chosen %>% filter(Year <= 2009 & Year >= 2000)
-    #             } else if (df_year() == "Before 2000"){
-    #                 selecteddata <- country_chosen %>% filter(Year < 2000)
-    #             } else {
-    #                 # year_chosen <- df_year()
-    #                 selecteddata <- country_chosen %>% filter(Year == df_year())
-    #             }
-    #         } else if (df_country() == "Global South"){
-    #             country_chosen <- target_chosen[!is.na(target_chosen$`Global South`), ]
-    #             if(df_year() == "All"){
-    #                 selecteddata <- country_chosen
-    #             } else if (df_year() == "From 2010 to 2019"){
-    #                 selecteddata <- country_chosen %>% filter(Year <= 2019 & Year >= 2010)
-    #             } else if (df_year() == "From 2000 to 2009"){
-    #                 selecteddata <- country_chosen %>% filter(Year <= 2009 & Year >= 2000)
-    #             } else if (df_year() == "Before 2000"){
-    #                 selecteddata <- country_chosen %>% filter(Year < 2000)
-    #             } else {
-    #                 # year_chosen <- df_year()
-    #                 selecteddata <- country_chosen %>% filter(Year == df_year())
-    #             }
-    #         } else {
-    #             country_chosen <- target_chosen[!is.na(target_chosen[, colnames(target_chosen) == df_country()]),]
-    #             if(df_year() == "All"){
-    #                 selecteddata <- country_chosen
-    #             } else if (df_year() == "From 2010 to 2019"){
-    #                 selecteddata <- country_chosen %>% filter(Year <= 2019 & Year >= 2010)
-    #             } else if (df_year() == "From 2000 to 2009"){
-    #                 selecteddata <- country_chosen %>% filter(Year <= 2009 & Year >= 2000)
-    #             } else if (df_year() == "Before 2000"){
-    #                 selecteddata <- country_chosen %>% filter(Year < 2000)
-    #             } else {
-    #                 # year_chosen <- df_year()
-    #                 selecteddata <- country_chosen %>% filter(Year == df_year())
-    #             }
-    #         }
-    #     } else { 
-    #         target_chosen <- df()[!is.na(df()[, colnames(df()) == df_target()]), ]
-    #         if(df_country() == "All"){
-    #             country_chosen <- target_chosen
-    #             if(df_year() == "All"){
-    #                 selecteddata <- country_chosen
-    #             } else if (df_year() == "From 2010 to 2019"){
-    #                 selecteddata <- country_chosen %>% filter(Year <= 2019 & Year >= 2010)
-    #             } else if (df_year() == "From 2000 to 2009"){
-    #                 selecteddata <- country_chosen %>% filter(Year <= 2009 & Year >= 2000)
-    #             } else if (df_year() == "Before 2000"){
-    #                 selecteddata <- country_chosen %>% filter(Year < 2000)
-    #             } else {
-    #                 # year_chosen <- df_year()
-    #                 selecteddata <- country_chosen %>% filter(Year == df_year())
-    #             }
-    #         } else if (df_country() == "Global South"){
-    #             country_chosen <- target_chosen[!is.na(target_chosen$`Global South`), ]
-    #             if(df_year() == "All"){
-    #                 selecteddata <- country_chosen
-    #             } else if (df_year() == "From 2010 to 2019"){
-    #                 selecteddata <- country_chosen %>% filter(Year <= 2019 & Year >= 2010)
-    #             } else if (df_year() == "From 2000 to 2009"){
-    #                 selecteddata <- country_chosen %>% filter(Year <= 2009 & Year >= 2000)
-    #             } else if (df_year() == "Before 2000"){
-    #                 selecteddata <- country_chosen %>% filter(Year < 2000)
-    #             } else {
-    #                 # year_chosen <- df_year()
-    #                 selecteddata <- country_chosen %>% filter(Year == df_year())
-    #             }
-    #         } else {
-    #             country_chosen <- target_chosen[!is.na(target_chosen[, colnames(target_chosen) == df_country()]),]
-    #             if(df_year() == "All"){
-    #                 selecteddata <- country_chosen
-    #             } else if (df_year() == "From 2010 to 2019"){
-    #                 selecteddata <- country_chosen %>% filter(Year <= 2019 & Year >= 2010)
-    #             } else if (df_year() == "From 2000 to 2009"){
-    #                 selecteddata <- country_chosen %>% filter(Year <= 2009 & Year >= 2000)
-    #             } else if (df_year() == "Before 2000"){
-    #                 selecteddata <- country_chosen %>% filter(Year < 2000)
-    #             } else {
-    #                 # year_chosen <- df_year()
-    #                 selecteddata <- country_chosen %>% filter(Year == df_year())
-    #             }
-    #         }
-    #     }
-    #     
-    #     description_df <- selecteddata[, which(colnames(selecteddata) == "Target 6.1"):which(colnames(selecteddata) == "Target 6.b")] %>% 
-    #         tidyr::unite(`SDG 6`, remove = TRUE, sep = ". ", na.rm = TRUE)
-    #     
-    #     data_selected <- selecteddata[,c("Authors", "Title", "Year", "Abbreviated Source Title", "Cited by",
-    #                                      "Document Type", "DOI", "Abstract")]
-    #     data_selected <- bind_cols(data_selected, description_df)
-    #     
-    #     DT::datatable({DT::datatable(data_selected)
-    #         data_selected$DOI <- paste0("<a href='", "https://doi.org/", data_selected$DOI,"' target='_blank'>", "https://doi.org/", data_selected$DOI,"</a>")
-    #         data_selected
-    #     }, escape = FALSE,
-    #     filter="top",
-    #     selection="multiple",
-    #     extensions = c('Buttons'),
-    #     options = list(sDom  = '<"top"pB>t<"bottom"i>r',
-    #                    pageLength = 5,
-    #                    buttons = c('copy', 'csv', 'excel', 'pdf', 'print'),
-    #                    scrollX = TRUE,
-    #                    autoWidth = FALSE))
-    # })
+    # Output table in Info tab ####
+    output$table <- DT::renderDataTable(
+        # server = FALSE, 
+        {
+        if (df_target() == "All"){
+            target_chosen <- df()
+            if(df_country() == "All"){
+                country_chosen <- target_chosen
+                if(df_year() == "All"){
+                    selecteddata <- country_chosen
+                } else if (df_year() == "From 2010 to 2019"){
+                    selecteddata <- country_chosen %>% filter(Year <= 2019 & Year >= 2010)
+                } else if (df_year() == "From 2000 to 2009"){
+                    selecteddata <- country_chosen %>% filter(Year <= 2009 & Year >= 2000)
+                } else if (df_year() == "Before 2000"){
+                    selecteddata <- country_chosen %>% filter(Year < 2000)
+                } else {
+                    # year_chosen <- df_year()
+                    selecteddata <- country_chosen %>% filter(Year == df_year())
+                }
+            } else if (df_country() == "Global South"){
+                country_chosen <- target_chosen[!is.na(target_chosen$`Global South`), ]
+                if(df_year() == "All"){
+                    selecteddata <- country_chosen
+                } else if (df_year() == "From 2010 to 2019"){
+                    selecteddata <- country_chosen %>% filter(Year <= 2019 & Year >= 2010)
+                } else if (df_year() == "From 2000 to 2009"){
+                    selecteddata <- country_chosen %>% filter(Year <= 2009 & Year >= 2000)
+                } else if (df_year() == "Before 2000"){
+                    selecteddata <- country_chosen %>% filter(Year < 2000)
+                } else {
+                    # year_chosen <- df_year()
+                    selecteddata <- country_chosen %>% filter(Year == df_year())
+                }
+            } else {
+                country_chosen <- target_chosen[!is.na(target_chosen[, colnames(target_chosen) == df_country()]),]
+                if(df_year() == "All"){
+                    selecteddata <- country_chosen
+                } else if (df_year() == "From 2010 to 2019"){
+                    selecteddata <- country_chosen %>% filter(Year <= 2019 & Year >= 2010)
+                } else if (df_year() == "From 2000 to 2009"){
+                    selecteddata <- country_chosen %>% filter(Year <= 2009 & Year >= 2000)
+                } else if (df_year() == "Before 2000"){
+                    selecteddata <- country_chosen %>% filter(Year < 2000)
+                } else {
+                    # year_chosen <- df_year()
+                    selecteddata <- country_chosen %>% filter(Year == df_year())
+                }
+            }
+        } else {
+            target_chosen <- df()[!is.na(df()[, colnames(df()) == df_target()]), ]
+            if(df_country() == "All"){
+                country_chosen <- target_chosen
+                if(df_year() == "All"){
+                    selecteddata <- country_chosen
+                } else if (df_year() == "From 2010 to 2019"){
+                    selecteddata <- country_chosen %>% filter(Year <= 2019 & Year >= 2010)
+                } else if (df_year() == "From 2000 to 2009"){
+                    selecteddata <- country_chosen %>% filter(Year <= 2009 & Year >= 2000)
+                } else if (df_year() == "Before 2000"){
+                    selecteddata <- country_chosen %>% filter(Year < 2000)
+                } else {
+                    # year_chosen <- df_year()
+                    selecteddata <- country_chosen %>% filter(Year == df_year())
+                }
+            } else if (df_country() == "Global South"){
+                country_chosen <- target_chosen[!is.na(target_chosen$`Global South`), ]
+                if(df_year() == "All"){
+                    selecteddata <- country_chosen
+                } else if (df_year() == "From 2010 to 2019"){
+                    selecteddata <- country_chosen %>% filter(Year <= 2019 & Year >= 2010)
+                } else if (df_year() == "From 2000 to 2009"){
+                    selecteddata <- country_chosen %>% filter(Year <= 2009 & Year >= 2000)
+                } else if (df_year() == "Before 2000"){
+                    selecteddata <- country_chosen %>% filter(Year < 2000)
+                } else {
+                    # year_chosen <- df_year()
+                    selecteddata <- country_chosen %>% filter(Year == df_year())
+                }
+            } else {
+                country_chosen <- target_chosen[!is.na(target_chosen[, colnames(target_chosen) == df_country()]),]
+                if(df_year() == "All"){
+                    selecteddata <- country_chosen
+                } else if (df_year() == "From 2010 to 2019"){
+                    selecteddata <- country_chosen %>% filter(Year <= 2019 & Year >= 2010)
+                } else if (df_year() == "From 2000 to 2009"){
+                    selecteddata <- country_chosen %>% filter(Year <= 2009 & Year >= 2000)
+                } else if (df_year() == "Before 2000"){
+                    selecteddata <- country_chosen %>% filter(Year < 2000)
+                } else {
+                    # year_chosen <- df_year()
+                    selecteddata <- country_chosen %>% filter(Year == df_year())
+                }
+            }
+        }
+
+        description_df <- selecteddata[, which(colnames(selecteddata) == "Target 6.1"):which(colnames(selecteddata) == "Target 6.b")] %>%
+            tidyr::unite(`SDG 6`, remove = TRUE, sep = "+", na.rm = TRUE)
+
+        data_selected <- selecteddata[,c("Authors", "Title", "Year"
+                                         , "Source title"
+                                         , "Cited by"
+                                         , "Document Type"
+                                         , "DOI"
+                                         , "Access Type"
+                                         , "Abstract"
+                                         )]
+        data_selected <- bind_cols(data_selected, description_df)
+        data_selected$DOI <- paste0("<a href='", "https://doi.org/", data_selected$DOI,"' target='_blank'>", "https://doi.org/", data_selected$DOI,"</a>")
+
+        DT::datatable(data_selected, 
+        rownames = FALSE,
+        filter="top",
+        selection="multiple",
+        escape = FALSE,
+        extensions = c('Buttons'),
+        options = list(sDom  = '<"top"pB>t<"bottom"i>r',
+                       pageLength = 5,
+                       # dom = 't',
+                       buttons = c('copy', 'csv', 'excel', 'pdf', 'print'),
+                       scrollX = TRUE,
+                       fixedColumns = FALSE)
+        )
+    })
 
     # Output map in Info tab ####
     output$map <- renderLeaflet({
@@ -2331,7 +2350,6 @@ server <- function(input, output, session) {
         selecteddata_v4 <- selecteddata[,c(first_long:last_long, 17)] %>%
             gather(key = "Long", value = "value", -`Document Type`, na.rm =TRUE)
 
-
         selecteddata_v2$lat <- selecteddata_v3$value
         selecteddata_v2$long <- selecteddata_v4$value
 
@@ -2342,7 +2360,6 @@ server <- function(input, output, session) {
 
         selecteddata_v2$Total <- rowSums(subset(selecteddata_v2, select = -c(Country, lat, long)), na.rm = TRUE)
         selecteddata_v2 <- selecteddata_v2[-which(selecteddata_v2$Country == "Belgium"),]
-
 
         tilesURL <- '//server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}'
         colors <- brewer.pal(n = 12, name = "Paired")
@@ -2564,7 +2581,7 @@ server <- function(input, output, session) {
             }
         }
         
-        WN_OA <- water_nexus3 %>% select(`Access Type`, Year) %>%
+        WN_OA <- selecteddata %>% select(`Access Type`, Year) %>%
             dplyr::group_by(`Access Type`,Year) %>%
             dplyr::summarise(n=n())
         WN_OA$`Access Type` <- as.character(WN_OA$`Access Type`)
@@ -2572,31 +2589,21 @@ server <- function(input, output, session) {
         
         WN_OA <- WN_OA %>% group_by(Year) %>% 
             mutate_at(vars(n), funs("percent" = round(.*100/sum(.), digits = 2)))
+        WN_OA <- WN_OA %>% filter(`Access Type` == "Not OA") %>% arrange(Year)
+        WN_OA$percent2 <- 100- WN_OA$percent
         
-        for (i in 1:nrow(WN_OA)){
-            if (WN_OA$percent[i] == 100){
-                WN_OA$`Access Type`[i] <- "Open Access"
-                WN_OA$percent[i] <- 0 
-                WN_OA$n[i] <- 0 
-            }
-        }
-        # something wrong here
-        WN_OA <- WN_OA %>% filter(`Access Type` == "Open Access") %>% arrange(Year)
-        attributes(WN_OA) <-NULL
-        f_year <- levels(as.factor(WN_OA$Year))[1]
-        l_year <- levels(as.factor(WN_OA$Year))[nlevels(as.factor(WN_OA$Year))]
-        
-        ggplotly(ggplot(WN_OA, aes(x = Year,  y = n, color = 'tomato')) +
+        ggplotly(ggplot(WN_OA, aes(x = Year,  y = percent2, color = 'tomato')) +
                      geom_point(size = 2, color = 'tomato')+
                      geom_line(size = 1.1125, color = 'tomato')+
                      theme_bw() +
                      xlab("Year") +
-                     ylab("Open Acess (%)") +
-                     scale_x_continuous(name = "Year", limits = c(f_year,l_year), breaks = seq(f_year,l_year, by =10)) +
+                     ylab("Percent of publications (%)") +
+                     scale_x_continuous(labels = scales::number_format(accuracy = 1))+
                      theme(text=element_text(family = "Arial")) +
                      theme(legend.title = element_blank()) +
                      theme(legend.text =  element_blank())
         )
+        
     })
     # Output publication year in Research tab ####
     output$Pubyear <- renderPlotly({
@@ -2696,9 +2703,7 @@ server <- function(input, output, session) {
             dplyr::group_by(Year, `Document Type`) %>%
             dplyr::summarise(`Number of publication`=n()) %>%
             dplyr::arrange(Year)
-        f_year <- WN_PU_year$Year[1]
-        l_year <- WN_PU_year$Year[nrow(WN_PU_year)]
-
+        
         ggplotly(ggplot(WN_PU_year, aes(x=Year, y=`Number of publication`, color = `Document Type`, group = `Document Type`))+
                      geom_point(size = 2)+
                      geom_line(size = 1.1125)+
@@ -2706,7 +2711,7 @@ server <- function(input, output, session) {
                      xlab("Year") +
                      ylab("Number of Publication") +
                      theme(text=element_text(family = "Arial")) +
-                     scale_x_continuous(name = "Year", limits = c(f_year,l_year), breaks = seq(f_year,l_year, by =10)) +
+                     scale_x_continuous(labels = scales::number_format(accuracy = 1))+
                      theme(legend.title = element_blank())
         )
 
