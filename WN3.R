@@ -34,22 +34,9 @@ first_long <- which (colnames(water_nexus3) == "long_Albania")
 last_long <- which (colnames(water_nexus3) == "long_Zimbabwe")
 first_target <-which(colnames(water_nexus3) == "Target 6.1")
 last_target <-which(colnames(water_nexus3) == "Target 6.b")
-
 water_nexus3$`Document Type`[which(is.na(water_nexus3$`Document Type`))] <- levels(water_nexus3$`Document Type`)[1]
-
 water_nexus3$`Document Type` <- as.character(water_nexus3$`Document Type`)
 water_nexus3$`Source title` <- as.character(water_nexus3$`Source title`)
-
-
-# Time divided into three periods 
-# add global south into country
-# Selection: first select goals and targets by creating new columns 
-# three filter: 
-# - targets
-# - country
-# - year 
-# 3 pages: general info: table + map, journal info: Top 20 journal + open-access, research info: Citation year, top keywords
-# 6 value boxes: Total of number publication, total countries, total document types, total cites, total authors, percentage of open-access
 
 #### ui ####
 
@@ -101,7 +88,7 @@ ui <- dashboardPage(skin = 'red',
                             hr(),
                             h3("Belgian Water Research in support of the Sustainable Development Goal 6"),
                             br(),
-                            h4("Reaching the Sustainable Development Goal (SDG) 6 on water and sanitation is fundamentally important and conditional to the achievement of all the other SDGs. Nonetheless, achieving this goal by 2030 is challenging and compromised, especially in the Global South. Science lies at the root of sustainable development and is a key of new solutions for addressing SDG 6. However, research outputs linked to SDG 6 are often unknown, forming disconnections between academic world and practitioners implementing solutions. This study proposed a method that can systematically explore scientific literature to qualitatively and quantitatively characterize the contribution of water research to the achievement of SDG 6 and its targets using bibliometric analysis. The method was applied for water research produced by Belgian-affiliated authors with a focus on the research co-conducted with authors from the Global South. Despite accounting for less than one percent of the total global publications, Belgian water research has had a relatively high publication rate compared to its neighboring countries. We observed high and longstanding collaborations between Belgian and scientists from worldwide countries, and a notably increasing collaboration rate with countries from the Global South. The main hotspots for Belgian water research are water treatment, water stress, water pollution, climate change, and water modelling. The biggest share of the publication body has focused on topics related to the target 6.3, 6.4, 6.5, and 6.6. However, keywords analysis also highlighted that a great scientific attention has been paid to optimize water treatment with advanced bio- and nanotechnologies, and integrated modeling, which have contributed to the achievement the targets 6.1 and 6.2 in Belgium. Despite great concerns of Belgian water research about water scarcity, Belgium is still struggling to achieve the target 6.4 related to water stress. High similarities of research hotspots between Belgian water research and Belgium-Global South water research were observed. Still, differences in scientific interests can be found, such as water pollution and sanitation problems in agriculture and irrigation in Belgium-Global South water research. The publication lists resulting from the bibliometric search have been integrated in a dashboard for easy identification of research and experts by practitioners and policy makers. The findings and dashboard are important not only for optimizing the SDG related science but also for shaping the Belgian cooperation and development policy in the water sector, and for creating appropriate synergies between Belgian water researchers and their counterparts in the Global South.
+                            h4("Reaching the Sustainable Development Goal (SDG) 6 on water and sanitation is fundamentally important and conditional to the achievement of all the other SDGs. Nonetheless, achieving this goal by 2030 is challenging, especially in the Global South. Science lies at the root of sustainable development and is a key of new solutions for addressing SDG 6. However, SDG 6-related scientific outputs are often unknown, forming disconnections between academic world and practitioners implementing solutions. This study proposed a bibliometric and text mining method to qualitatively and quantitatively characterize the contribution of water research to the achievement of SDG 6. The method was applied for water research produced by Belgian-affiliated authors with a focus on the Global South collaboration. Despite accounting for less than one percent of the total global publications, Belgian water research has had a relatively high publication rate compared to its neighboring countries. We observed longstanding collaborations between Belgian and scientists from worldwide countries, and an increasing collaboration rate with countries from the Global South. The biggest share of publications focused on topics related to the targets 6.3, 6.4, 6.5, and 6.6, with the main hotspots for Belgian water research being water treatment, water stress, water pollution, climate change, and water modelling. The findings of the bibliometric search have been integrated into an online, user-friendly dashboard to facilitate the identification of research body and experts for practitioners and policy makers. The presented methodology is sufficiently generic and can be used to optimize other science programs in relation to the 2030 Agenda in other countries and regions. In this case study, the findings support shaping the Belgian cooperation and development policy in the water sector, and creating appropriate synergies between Belgian water researchers and their counterparts in the Global South.
                                ")
                         )
                     ),
@@ -240,7 +227,7 @@ server <- function(input, output, session) {
         if(df_target() == "All"){
             colnames(df()[, first_country:last_country])
         } else {
-            country_1 <- df()[!is.na(df()[, colnames(df()) == df_target()]), ]
+            country_1 <- df()[as.vector(!is.na(df()[, colnames(df()) == df_target()])), ]
             f_country <- which(colnames(df()) == "Access Type")+1
             l_country <- str_which(colnames(df()), "lat")[1]-1
             colnames(df()[, f_country:l_country])
@@ -264,26 +251,26 @@ server <- function(input, output, session) {
             if(df_country() == "All"){
                 levels(as.factor(target_name$Year))
             } else if(df_country() == "Global South"){
-                country_name <- target_name[!is.na(target_name$`Global South`), ]
+                country_name <- target_name[as.vector(!is.na(target_name$`Global South`)), ]
                 year2 <- levels(as.factor(country_name$Year))
                 year2
                 
             } else {
-                year_1 <- target_name[!is.na(target_name[, colnames(target_name) == df_country()]),]
+                year_1 <- target_name[as.vector(!is.na(target_name[, colnames(target_name) == df_country()])),]
                 year_2 <- levels(as.factor(year_1$Year))
                 year_2
             }
         } else {
-            target_name <- df()[!is.na(df()[, colnames(df()) == df_target()]), ]
+            target_name <- df()[as.vector(!is.na(df()[, colnames(df()) == df_target()])), ]
             if(df_country() == "All"){
                 levels(as.factor(target_name$Year))
             } else if(df_country() == "Global South"){
-                country_name <- target_name[!is.na(target_name$`Global South`), ]
+                country_name <- target_name[as.vector(!is.na(target_name$`Global South`)), ]
                 year2 <- levels(as.factor(country_name$Year))
                 year2
                 
             } else {
-                year_1 <- target_name[!is.na(target_name[, colnames(target_name) == df_country()]),]
+                year_1 <- target_name[as.vector(!is.na(target_name[, colnames(target_name) == df_country()])),]
                 year_2 <- levels(as.factor(year_1$Year))
                 year_2
             }
@@ -319,7 +306,7 @@ server <- function(input, output, session) {
                     selecteddata <- country_chosen %>% filter(Year == df_year())
                 }
             } else if (df_country() == "Global South"){
-                country_chosen <- target_chosen[!is.na(target_chosen$`Global South`), ]
+                country_chosen <- target_chosen[as.vector(!is.na(target_chosen$`Global South`)), ]
                 if(df_year() == "All"){
                     selecteddata <- country_chosen
                 } else if (df_year() == "From 2010 to 2019"){
@@ -333,7 +320,7 @@ server <- function(input, output, session) {
                     selecteddata <- country_chosen %>% filter(Year == df_year())
                 }
             } else {
-                country_chosen <- target_chosen[!is.na(target_chosen[, colnames(target_chosen) == df_country()]),]
+                country_chosen <- target_chosen[as.vector(!is.na(target_chosen[, colnames(target_chosen) == df_country()])),]
                 if(df_year() == "All"){
                     selecteddata <- country_chosen
                 } else if (df_year() == "From 2010 to 2019"){
@@ -348,7 +335,7 @@ server <- function(input, output, session) {
                 }
             }
         } else { 
-            target_chosen <- df()[!is.na(df()[, colnames(df()) == df_target()]), ]
+            target_chosen <- df()[as.vector(!is.na(df()[, colnames(df()) == df_target()])), ]
             if(df_country() == "All"){
                 country_chosen <- target_chosen
                 if(df_year() == "All"){
@@ -364,7 +351,7 @@ server <- function(input, output, session) {
                     selecteddata <- country_chosen %>% filter(Year == df_year())
                 }
             } else if (df_country() == "Global South"){
-                country_chosen <- target_chosen[!is.na(target_chosen$`Global South`), ]
+                country_chosen <- target_chosen[as.vector(!is.na(target_chosen$`Global South`)), ]
                 if(df_year() == "All"){
                     selecteddata <- country_chosen
                 } else if (df_year() == "From 2010 to 2019"){
@@ -378,7 +365,7 @@ server <- function(input, output, session) {
                     selecteddata <- country_chosen %>% filter(Year == df_year())
                 }
             } else {
-                country_chosen <- target_chosen[!is.na(target_chosen[, colnames(target_chosen) == df_country()]),]
+                country_chosen <- target_chosen[as.vector(!is.na(target_chosen[, colnames(target_chosen) == df_country()])),]
                 if(df_year() == "All"){
                     selecteddata <- country_chosen
                 } else if (df_year() == "From 2010 to 2019"){
@@ -420,7 +407,7 @@ server <- function(input, output, session) {
                     selecteddata <- country_chosen %>% filter(Year == df_year())
                 }
             } else if (df_country() == "Global South"){
-                country_chosen <- target_chosen[!is.na(target_chosen$`Global South`), ]
+                country_chosen <- target_chosen[as.vector(!is.na(target_chosen$`Global South`)), ]
                 if(df_year() == "All"){
                     selecteddata <- country_chosen
                 } else if (df_year() == "From 2010 to 2019"){
@@ -434,7 +421,7 @@ server <- function(input, output, session) {
                     selecteddata <- country_chosen %>% filter(Year == df_year())
                 }
             } else {
-                country_chosen <- target_chosen[!is.na(target_chosen[, colnames(target_chosen) == df_country()]),]
+                country_chosen <- target_chosen[as.vector(!is.na(target_chosen[, colnames(target_chosen) == df_country()])),]
                 if(df_year() == "All"){
                     selecteddata <- country_chosen
                 } else if (df_year() == "From 2010 to 2019"){
@@ -449,7 +436,7 @@ server <- function(input, output, session) {
                 }
             }
         } else { 
-            target_chosen <- df()[!is.na(df()[, colnames(df()) == df_target()]), ]
+            target_chosen <- df()[as.vector(!is.na(df()[, colnames(df()) == df_target()])), ]
             if(df_country() == "All"){
                 country_chosen <- target_chosen
                 if(df_year() == "All"){
@@ -465,7 +452,7 @@ server <- function(input, output, session) {
                     selecteddata <- country_chosen %>% filter(Year == df_year())
                 }
             } else if (df_country() == "Global South"){
-                country_chosen <- target_chosen[!is.na(target_chosen$`Global South`), ]
+                country_chosen <- target_chosen[as.vector(!is.na(target_chosen$`Global South`)), ]
                 if(df_year() == "All"){
                     selecteddata <- country_chosen
                 } else if (df_year() == "From 2010 to 2019"){
@@ -479,7 +466,7 @@ server <- function(input, output, session) {
                     selecteddata <- country_chosen %>% filter(Year == df_year())
                 }
             } else {
-                country_chosen <- target_chosen[!is.na(target_chosen[, colnames(target_chosen) == df_country()]),]
+                country_chosen <- target_chosen[as.vector(!is.na(target_chosen[, colnames(target_chosen) == df_country()])),]
                 if(df_year() == "All"){
                     selecteddata <- country_chosen
                 } else if (df_year() == "From 2010 to 2019"){
@@ -521,7 +508,7 @@ server <- function(input, output, session) {
                     selecteddata <- country_chosen %>% filter(Year == df_year())
                 }
             } else if (df_country() == "Global South"){
-                country_chosen <- target_chosen[!is.na(target_chosen$`Global South`), ]
+                country_chosen <- target_chosen[as.vector(!is.na(target_chosen$`Global South`)), ]
                 if(df_year() == "All"){
                     selecteddata <- country_chosen
                 } else if (df_year() == "From 2010 to 2019"){
@@ -535,7 +522,7 @@ server <- function(input, output, session) {
                     selecteddata <- country_chosen %>% filter(Year == df_year())
                 }
             } else {
-                country_chosen <- target_chosen[!is.na(target_chosen[, colnames(target_chosen) == df_country()]),]
+                country_chosen <- target_chosen[as.vector(!is.na(target_chosen[, colnames(target_chosen) == df_country()])),]
                 if(df_year() == "All"){
                     selecteddata <- country_chosen
                 } else if (df_year() == "From 2010 to 2019"){
@@ -550,7 +537,7 @@ server <- function(input, output, session) {
                 }
             }
         } else { 
-            target_chosen <- df()[!is.na(df()[, colnames(df()) == df_target()]), ]
+            target_chosen <- df()[as.vector(!is.na(df()[, colnames(df()) == df_target()])), ]
             if(df_country() == "All"){
                 country_chosen <- target_chosen
                 if(df_year() == "All"){
@@ -566,7 +553,7 @@ server <- function(input, output, session) {
                     selecteddata <- country_chosen %>% filter(Year == df_year())
                 }
             } else if (df_country() == "Global South"){
-                country_chosen <- target_chosen[!is.na(target_chosen$`Global South`), ]
+                country_chosen <- target_chosen[as.vector(!is.na(target_chosen$`Global South`)), ]
                 if(df_year() == "All"){
                     selecteddata <- country_chosen
                 } else if (df_year() == "From 2010 to 2019"){
@@ -580,7 +567,7 @@ server <- function(input, output, session) {
                     selecteddata <- country_chosen %>% filter(Year == df_year())
                 }
             } else {
-                country_chosen <- target_chosen[!is.na(target_chosen[, colnames(target_chosen) == df_country()]),]
+                country_chosen <- target_chosen[as.vector(!is.na(target_chosen[, colnames(target_chosen) == df_country()])),]
                 if(df_year() == "All"){
                     selecteddata <- country_chosen
                 } else if (df_year() == "From 2010 to 2019"){
@@ -622,7 +609,7 @@ server <- function(input, output, session) {
                     selecteddata <- country_chosen %>% filter(Year == df_year())
                 }
             } else if (df_country() == "Global South"){
-                country_chosen <- target_chosen[!is.na(target_chosen$`Global South`), ]
+                country_chosen <- target_chosen[as.vector(!is.na(target_chosen$`Global South`)), ]
                 if(df_year() == "All"){
                     selecteddata <- country_chosen
                 } else if (df_year() == "From 2010 to 2019"){
@@ -636,7 +623,7 @@ server <- function(input, output, session) {
                     selecteddata <- country_chosen %>% filter(Year == df_year())
                 }
             } else {
-                country_chosen <- target_chosen[!is.na(target_chosen[, colnames(target_chosen) == df_country()]),]
+                country_chosen <- target_chosen[as.vector(!is.na(target_chosen[, colnames(target_chosen) == df_country()])),]
                 if(df_year() == "All"){
                     selecteddata <- country_chosen
                 } else if (df_year() == "From 2010 to 2019"){
@@ -651,7 +638,7 @@ server <- function(input, output, session) {
                 }
             }
         } else { 
-            target_chosen <- df()[!is.na(df()[, colnames(df()) == df_target()]), ]
+            target_chosen <- df()[as.vector(!is.na(df()[, colnames(df()) == df_target()])), ]
             if(df_country() == "All"){
                 country_chosen <- target_chosen
                 if(df_year() == "All"){
@@ -667,7 +654,7 @@ server <- function(input, output, session) {
                     selecteddata <- country_chosen %>% filter(Year == df_year())
                 }
             } else if (df_country() == "Global South"){
-                country_chosen <- target_chosen[!is.na(target_chosen$`Global South`), ]
+                country_chosen <- target_chosen[as.vector(!is.na(target_chosen$`Global South`)), ]
                 if(df_year() == "All"){
                     selecteddata <- country_chosen
                 } else if (df_year() == "From 2010 to 2019"){
@@ -681,7 +668,7 @@ server <- function(input, output, session) {
                     selecteddata <- country_chosen %>% filter(Year == df_year())
                 }
             } else {
-                country_chosen <- target_chosen[!is.na(target_chosen[, colnames(target_chosen) == df_country()]),]
+                country_chosen <- target_chosen[as.vector(!is.na(target_chosen[, colnames(target_chosen) == df_country()])),]
                 if(df_year() == "All"){
                     selecteddata <- country_chosen
                 } else if (df_year() == "From 2010 to 2019"){
@@ -723,7 +710,7 @@ server <- function(input, output, session) {
                     selecteddata <- country_chosen %>% filter(Year == df_year())
                 }
             } else if (df_country() == "Global South"){
-                country_chosen <- target_chosen[!is.na(target_chosen$`Global South`), ]
+                country_chosen <- target_chosen[as.vector(!is.na(target_chosen$`Global South`)), ]
                 if(df_year() == "All"){
                     selecteddata <- country_chosen
                 } else if (df_year() == "From 2010 to 2019"){
@@ -737,7 +724,7 @@ server <- function(input, output, session) {
                     selecteddata <- country_chosen %>% filter(Year == df_year())
                 }
             } else {
-                country_chosen <- target_chosen[!is.na(target_chosen[, colnames(target_chosen) == df_country()]),]
+                country_chosen <- target_chosen[as.vector(!is.na(target_chosen[, colnames(target_chosen) == df_country()])),]
                 if(df_year() == "All"){
                     selecteddata <- country_chosen
                 } else if (df_year() == "From 2010 to 2019"){
@@ -752,7 +739,7 @@ server <- function(input, output, session) {
                 }
             }
         } else { 
-            target_chosen <- df()[!is.na(df()[, colnames(df()) == df_target()]), ]
+            target_chosen <- df()[as.vector(!is.na(df()[, colnames(df()) == df_target()])), ]
             if(df_country() == "All"){
                 country_chosen <- target_chosen
                 if(df_year() == "All"){
@@ -768,7 +755,7 @@ server <- function(input, output, session) {
                     selecteddata <- country_chosen %>% filter(Year == df_year())
                 }
             } else if (df_country() == "Global South"){
-                country_chosen <- target_chosen[!is.na(target_chosen$`Global South`), ]
+                country_chosen <- target_chosen[as.vector(!is.na(target_chosen$`Global South`)), ]
                 if(df_year() == "All"){
                     selecteddata <- country_chosen
                 } else if (df_year() == "From 2010 to 2019"){
@@ -782,7 +769,7 @@ server <- function(input, output, session) {
                     selecteddata <- country_chosen %>% filter(Year == df_year())
                 }
             } else {
-                country_chosen <- target_chosen[!is.na(target_chosen[, colnames(target_chosen) == df_country()]),]
+                country_chosen <- target_chosen[as.vector(!is.na(target_chosen[, colnames(target_chosen) == df_country()])),]
                 if(df_year() == "All"){
                     selecteddata <- country_chosen
                 } else if (df_year() == "From 2010 to 2019"){
@@ -824,7 +811,7 @@ server <- function(input, output, session) {
                     selecteddata <- country_chosen %>% filter(Year == df_year())
                 }
             } else if (df_country() == "Global South"){
-                country_chosen <- target_chosen[!is.na(target_chosen$`Global South`), ]
+                country_chosen <- target_chosen[as.vector(!is.na(target_chosen$`Global South`)), ]
                 if(df_year() == "All"){
                     selecteddata <- country_chosen
                 } else if (df_year() == "From 2010 to 2019"){
@@ -838,7 +825,7 @@ server <- function(input, output, session) {
                     selecteddata <- country_chosen %>% filter(Year == df_year())
                 }
             } else {
-                country_chosen <- target_chosen[!is.na(target_chosen[, colnames(target_chosen) == df_country()]),]
+                country_chosen <- target_chosen[as.vector(!is.na(target_chosen[, colnames(target_chosen) == df_country()])),]
                 if(df_year() == "All"){
                     selecteddata <- country_chosen
                 } else if (df_year() == "From 2010 to 2019"){
@@ -853,7 +840,7 @@ server <- function(input, output, session) {
                 }
             }
         } else { 
-            target_chosen <- df()[!is.na(df()[, colnames(df()) == df_target()]), ]
+            target_chosen <- df()[as.vector(!is.na(df()[, colnames(df()) == df_target()])), ]
             if(df_country() == "All"){
                 country_chosen <- target_chosen
                 if(df_year() == "All"){
@@ -869,7 +856,7 @@ server <- function(input, output, session) {
                     selecteddata <- country_chosen %>% filter(Year == df_year())
                 }
             } else if (df_country() == "Global South"){
-                country_chosen <- target_chosen[!is.na(target_chosen$`Global South`), ]
+                country_chosen <- target_chosen[as.vector(!is.na(target_chosen$`Global South`)), ]
                 if(df_year() == "All"){
                     selecteddata <- country_chosen
                 } else if (df_year() == "From 2010 to 2019"){
@@ -883,7 +870,7 @@ server <- function(input, output, session) {
                     selecteddata <- country_chosen %>% filter(Year == df_year())
                 }
             } else {
-                country_chosen <- target_chosen[!is.na(target_chosen[, colnames(target_chosen) == df_country()]),]
+                country_chosen <- target_chosen[as.vector(!is.na(target_chosen[, colnames(target_chosen) == df_country()])),]
                 if(df_year() == "All"){
                     selecteddata <- country_chosen
                 } else if (df_year() == "From 2010 to 2019"){
@@ -926,7 +913,7 @@ server <- function(input, output, session) {
                     selecteddata <- country_chosen %>% filter(Year == df_year())
                 }
             } else if (df_country() == "Global South"){
-                country_chosen <- target_chosen[!is.na(target_chosen$`Global South`), ]
+                country_chosen <- target_chosen[as.vector(!is.na(target_chosen$`Global South`)), ]
                 if(df_year() == "All"){
                     selecteddata <- country_chosen
                 } else if (df_year() == "From 2010 to 2019"){
@@ -940,7 +927,7 @@ server <- function(input, output, session) {
                     selecteddata <- country_chosen %>% filter(Year == df_year())
                 }
             } else {
-                country_chosen <- target_chosen[!is.na(target_chosen[, colnames(target_chosen) == df_country()]),]
+                country_chosen <- target_chosen[as.vector(!is.na(target_chosen[, colnames(target_chosen) == df_country()])),]
                 if(df_year() == "All"){
                     selecteddata <- country_chosen
                 } else if (df_year() == "From 2010 to 2019"){
@@ -955,7 +942,7 @@ server <- function(input, output, session) {
                 }
             }
         } else { 
-            target_chosen <- df()[!is.na(df()[, colnames(df()) == df_target()]), ]
+            target_chosen <- df()[as.vector(!is.na(df()[, colnames(df()) == df_target()])), ]
             if(df_country() == "All"){
                 country_chosen <- target_chosen
                 if(df_year() == "All"){
@@ -971,7 +958,7 @@ server <- function(input, output, session) {
                     selecteddata <- country_chosen %>% filter(Year == df_year())
                 }
             } else if (df_country() == "Global South"){
-                country_chosen <- target_chosen[!is.na(target_chosen$`Global South`), ]
+                country_chosen <- target_chosen[as.vector(!is.na(target_chosen$`Global South`)), ]
                 if(df_year() == "All"){
                     selecteddata <- country_chosen
                 } else if (df_year() == "From 2010 to 2019"){
@@ -985,7 +972,7 @@ server <- function(input, output, session) {
                     selecteddata <- country_chosen %>% filter(Year == df_year())
                 }
             } else {
-                country_chosen <- target_chosen[!is.na(target_chosen[, colnames(target_chosen) == df_country()]),]
+                country_chosen <- target_chosen[as.vector(!is.na(target_chosen[, colnames(target_chosen) == df_country()])),]
                 if(df_year() == "All"){
                     selecteddata <- country_chosen
                 } else if (df_year() == "From 2010 to 2019"){
@@ -1027,7 +1014,7 @@ server <- function(input, output, session) {
                     selecteddata <- country_chosen %>% filter(Year == df_year())
                 }
             } else if (df_country() == "Global South"){
-                country_chosen <- target_chosen[!is.na(target_chosen$`Global South`), ]
+                country_chosen <- target_chosen[as.vector(!is.na(target_chosen$`Global South`)), ]
                 if(df_year() == "All"){
                     selecteddata <- country_chosen
                 } else if (df_year() == "From 2010 to 2019"){
@@ -1041,7 +1028,7 @@ server <- function(input, output, session) {
                     selecteddata <- country_chosen %>% filter(Year == df_year())
                 }
             } else {
-                country_chosen <- target_chosen[!is.na(target_chosen[, colnames(target_chosen) == df_country()]),]
+                country_chosen <- target_chosen[as.vector(!is.na(target_chosen[, colnames(target_chosen) == df_country()])),]
                 if(df_year() == "All"){
                     selecteddata <- country_chosen
                 } else if (df_year() == "From 2010 to 2019"){
@@ -1056,7 +1043,7 @@ server <- function(input, output, session) {
                 }
             }
         } else { 
-            target_chosen <- df()[!is.na(df()[, colnames(df()) == df_target()]), ]
+            target_chosen <- df()[as.vector(!is.na(df()[, colnames(df()) == df_target()])), ]
             if(df_country() == "All"){
                 country_chosen <- target_chosen
                 if(df_year() == "All"){
@@ -1072,7 +1059,7 @@ server <- function(input, output, session) {
                     selecteddata <- country_chosen %>% filter(Year == df_year())
                 }
             } else if (df_country() == "Global South"){
-                country_chosen <- target_chosen[!is.na(target_chosen$`Global South`), ]
+                country_chosen <- target_chosen[as.vector(!is.na(target_chosen$`Global South`)), ]
                 if(df_year() == "All"){
                     selecteddata <- country_chosen
                 } else if (df_year() == "From 2010 to 2019"){
@@ -1086,7 +1073,7 @@ server <- function(input, output, session) {
                     selecteddata <- country_chosen %>% filter(Year == df_year())
                 }
             } else {
-                country_chosen <- target_chosen[!is.na(target_chosen[, colnames(target_chosen) == df_country()]),]
+                country_chosen <- target_chosen[as.vector(!is.na(target_chosen[, colnames(target_chosen) == df_country()])),]
                 if(df_year() == "All"){
                     selecteddata <- country_chosen
                 } else if (df_year() == "From 2010 to 2019"){
@@ -1129,7 +1116,7 @@ server <- function(input, output, session) {
                     selecteddata <- country_chosen %>% filter(Year == df_year())
                 }
             } else if (df_country() == "Global South"){
-                country_chosen <- target_chosen[!is.na(target_chosen$`Global South`), ]
+                country_chosen <- target_chosen[as.vector(!is.na(target_chosen$`Global South`)), ]
                 if(df_year() == "All"){
                     selecteddata <- country_chosen
                 } else if (df_year() == "From 2010 to 2019"){
@@ -1143,7 +1130,7 @@ server <- function(input, output, session) {
                     selecteddata <- country_chosen %>% filter(Year == df_year())
                 }
             } else {
-                country_chosen <- target_chosen[!is.na(target_chosen[, colnames(target_chosen) == df_country()]),]
+                country_chosen <- target_chosen[as.vector(!is.na(target_chosen[, colnames(target_chosen) == df_country()])),]
                 if(df_year() == "All"){
                     selecteddata <- country_chosen
                 } else if (df_year() == "From 2010 to 2019"){
@@ -1158,7 +1145,7 @@ server <- function(input, output, session) {
                 }
             }
         } else { 
-            target_chosen <- df()[!is.na(df()[, colnames(df()) == df_target()]), ]
+            target_chosen <- df()[as.vector(!is.na(df()[, colnames(df()) == df_target()])), ]
             if(df_country() == "All"){
                 country_chosen <- target_chosen
                 if(df_year() == "All"){
@@ -1174,7 +1161,7 @@ server <- function(input, output, session) {
                     selecteddata <- country_chosen %>% filter(Year == df_year())
                 }
             } else if (df_country() == "Global South"){
-                country_chosen <- target_chosen[!is.na(target_chosen$`Global South`), ]
+                country_chosen <- target_chosen[as.vector(!is.na(target_chosen$`Global South`)), ]
                 if(df_year() == "All"){
                     selecteddata <- country_chosen
                 } else if (df_year() == "From 2010 to 2019"){
@@ -1188,7 +1175,7 @@ server <- function(input, output, session) {
                     selecteddata <- country_chosen %>% filter(Year == df_year())
                 }
             } else {
-                country_chosen <- target_chosen[!is.na(target_chosen[, colnames(target_chosen) == df_country()]),]
+                country_chosen <- target_chosen[as.vector(!is.na(target_chosen[, colnames(target_chosen) == df_country()])),]
                 if(df_year() == "All"){
                     selecteddata <- country_chosen
                 } else if (df_year() == "From 2010 to 2019"){
@@ -1230,7 +1217,7 @@ server <- function(input, output, session) {
                     selecteddata <- country_chosen %>% filter(Year == df_year())
                 }
             } else if (df_country() == "Global South"){
-                country_chosen <- target_chosen[!is.na(target_chosen$`Global South`), ]
+                country_chosen <- target_chosen[as.vector(!is.na(target_chosen$`Global South`)), ]
                 if(df_year() == "All"){
                     selecteddata <- country_chosen
                 } else if (df_year() == "From 2010 to 2019"){
@@ -1244,7 +1231,7 @@ server <- function(input, output, session) {
                     selecteddata <- country_chosen %>% filter(Year == df_year())
                 }
             } else {
-                country_chosen <- target_chosen[!is.na(target_chosen[, colnames(target_chosen) == df_country()]),]
+                country_chosen <- target_chosen[as.vector(!is.na(target_chosen[, colnames(target_chosen) == df_country()])),]
                 if(df_year() == "All"){
                     selecteddata <- country_chosen
                 } else if (df_year() == "From 2010 to 2019"){
@@ -1259,7 +1246,7 @@ server <- function(input, output, session) {
                 }
             }
         } else { 
-            target_chosen <- df()[!is.na(df()[, colnames(df()) == df_target()]), ]
+            target_chosen <- df()[as.vector(!is.na(df()[, colnames(df()) == df_target()])), ]
             if(df_country() == "All"){
                 country_chosen <- target_chosen
                 if(df_year() == "All"){
@@ -1275,7 +1262,7 @@ server <- function(input, output, session) {
                     selecteddata <- country_chosen %>% filter(Year == df_year())
                 }
             } else if (df_country() == "Global South"){
-                country_chosen <- target_chosen[!is.na(target_chosen$`Global South`), ]
+                country_chosen <- target_chosen[as.vector(!is.na(target_chosen$`Global South`)), ]
                 if(df_year() == "All"){
                     selecteddata <- country_chosen
                 } else if (df_year() == "From 2010 to 2019"){
@@ -1289,7 +1276,7 @@ server <- function(input, output, session) {
                     selecteddata <- country_chosen %>% filter(Year == df_year())
                 }
             } else {
-                country_chosen <- target_chosen[!is.na(target_chosen[, colnames(target_chosen) == df_country()]),]
+                country_chosen <- target_chosen[as.vector(!is.na(target_chosen[, colnames(target_chosen) == df_country()])),]
                 if(df_year() == "All"){
                     selecteddata <- country_chosen
                 } else if (df_year() == "From 2010 to 2019"){
@@ -1331,7 +1318,7 @@ server <- function(input, output, session) {
                     selecteddata <- country_chosen %>% filter(Year == df_year())
                 }
             } else if (df_country() == "Global South"){
-                country_chosen <- target_chosen[!is.na(target_chosen$`Global South`), ]
+                country_chosen <- target_chosen[as.vector(!is.na(target_chosen$`Global South`)), ]
                 if(df_year() == "All"){
                     selecteddata <- country_chosen
                 } else if (df_year() == "From 2010 to 2019"){
@@ -1345,7 +1332,7 @@ server <- function(input, output, session) {
                     selecteddata <- country_chosen %>% filter(Year == df_year())
                 }
             } else {
-                country_chosen <- target_chosen[!is.na(target_chosen[, colnames(target_chosen) == df_country()]),]
+                country_chosen <- target_chosen[as.vector(!is.na(target_chosen[, colnames(target_chosen) == df_country()])),]
                 if(df_year() == "All"){
                     selecteddata <- country_chosen
                 } else if (df_year() == "From 2010 to 2019"){
@@ -1360,7 +1347,7 @@ server <- function(input, output, session) {
                 }
             }
         } else { 
-            target_chosen <- df()[!is.na(df()[, colnames(df()) == df_target()]), ]
+            target_chosen <- df()[as.vector(!is.na(df()[, colnames(df()) == df_target()])), ]
             if(df_country() == "All"){
                 country_chosen <- target_chosen
                 if(df_year() == "All"){
@@ -1376,7 +1363,7 @@ server <- function(input, output, session) {
                     selecteddata <- country_chosen %>% filter(Year == df_year())
                 }
             } else if (df_country() == "Global South"){
-                country_chosen <- target_chosen[!is.na(target_chosen$`Global South`), ]
+                country_chosen <- target_chosen[as.vector(!is.na(target_chosen$`Global South`)), ]
                 if(df_year() == "All"){
                     selecteddata <- country_chosen
                 } else if (df_year() == "From 2010 to 2019"){
@@ -1390,7 +1377,7 @@ server <- function(input, output, session) {
                     selecteddata <- country_chosen %>% filter(Year == df_year())
                 }
             } else {
-                country_chosen <- target_chosen[!is.na(target_chosen[, colnames(target_chosen) == df_country()]),]
+                country_chosen <- target_chosen[as.vector(!is.na(target_chosen[, colnames(target_chosen) == df_country()])),]
                 if(df_year() == "All"){
                     selecteddata <- country_chosen
                 } else if (df_year() == "From 2010 to 2019"){
@@ -1432,7 +1419,7 @@ server <- function(input, output, session) {
                     selecteddata <- country_chosen %>% filter(Year == df_year())
                 }
             } else if (df_country() == "Global South"){
-                country_chosen <- target_chosen[!is.na(target_chosen$`Global South`), ]
+                country_chosen <- target_chosen[as.vector(!is.na(target_chosen$`Global South`)), ]
                 if(df_year() == "All"){
                     selecteddata <- country_chosen
                 } else if (df_year() == "From 2010 to 2019"){
@@ -1446,7 +1433,7 @@ server <- function(input, output, session) {
                     selecteddata <- country_chosen %>% filter(Year == df_year())
                 }
             } else {
-                country_chosen <- target_chosen[!is.na(target_chosen[, colnames(target_chosen) == df_country()]),]
+                country_chosen <- target_chosen[as.vector(!is.na(target_chosen[, colnames(target_chosen) == df_country()])),]
                 if(df_year() == "All"){
                     selecteddata <- country_chosen
                 } else if (df_year() == "From 2010 to 2019"){
@@ -1461,7 +1448,7 @@ server <- function(input, output, session) {
                 }
             }
         } else { 
-            target_chosen <- df()[!is.na(df()[, colnames(df()) == df_target()]), ]
+            target_chosen <- df()[as.vector(!is.na(df()[, colnames(df()) == df_target()])), ]
             if(df_country() == "All"){
                 country_chosen <- target_chosen
                 if(df_year() == "All"){
@@ -1477,7 +1464,7 @@ server <- function(input, output, session) {
                     selecteddata <- country_chosen %>% filter(Year == df_year())
                 }
             } else if (df_country() == "Global South"){
-                country_chosen <- target_chosen[!is.na(target_chosen$`Global South`), ]
+                country_chosen <- target_chosen[as.vector(!is.na(target_chosen$`Global South`)), ]
                 if(df_year() == "All"){
                     selecteddata <- country_chosen
                 } else if (df_year() == "From 2010 to 2019"){
@@ -1491,7 +1478,7 @@ server <- function(input, output, session) {
                     selecteddata <- country_chosen %>% filter(Year == df_year())
                 }
             } else {
-                country_chosen <- target_chosen[!is.na(target_chosen[, colnames(target_chosen) == df_country()]),]
+                country_chosen <- target_chosen[as.vector(!is.na(target_chosen[, colnames(target_chosen) == df_country()])),]
                 if(df_year() == "All"){
                     selecteddata <- country_chosen
                 } else if (df_year() == "From 2010 to 2019"){
@@ -1534,7 +1521,7 @@ server <- function(input, output, session) {
                     selecteddata <- country_chosen %>% filter(Year == df_year())
                 }
             } else if (df_country() == "Global South"){
-                country_chosen <- target_chosen[!is.na(target_chosen$`Global South`), ]
+                country_chosen <- target_chosen[as.vector(!is.na(target_chosen$`Global South`)), ]
                 if(df_year() == "All"){
                     selecteddata <- country_chosen
                 } else if (df_year() == "From 2010 to 2019"){
@@ -1548,7 +1535,7 @@ server <- function(input, output, session) {
                     selecteddata <- country_chosen %>% filter(Year == df_year())
                 }
             } else {
-                country_chosen <- target_chosen[!is.na(target_chosen[, colnames(target_chosen) == df_country()]),]
+                country_chosen <- target_chosen[as.vector(!is.na(target_chosen[, colnames(target_chosen) == df_country()])),]
                 if(df_year() == "All"){
                     selecteddata <- country_chosen
                 } else if (df_year() == "From 2010 to 2019"){
@@ -1563,7 +1550,7 @@ server <- function(input, output, session) {
                 }
             }
         } else { 
-            target_chosen <- df()[!is.na(df()[, colnames(df()) == df_target()]), ]
+            target_chosen <- df()[as.vector(!is.na(df()[, colnames(df()) == df_target()])), ]
             if(df_country() == "All"){
                 country_chosen <- target_chosen
                 if(df_year() == "All"){
@@ -1579,7 +1566,7 @@ server <- function(input, output, session) {
                     selecteddata <- country_chosen %>% filter(Year == df_year())
                 }
             } else if (df_country() == "Global South"){
-                country_chosen <- target_chosen[!is.na(target_chosen$`Global South`), ]
+                country_chosen <- target_chosen[as.vector(!is.na(target_chosen$`Global South`)), ]
                 if(df_year() == "All"){
                     selecteddata <- country_chosen
                 } else if (df_year() == "From 2010 to 2019"){
@@ -1593,7 +1580,7 @@ server <- function(input, output, session) {
                     selecteddata <- country_chosen %>% filter(Year == df_year())
                 }
             } else {
-                country_chosen <- target_chosen[!is.na(target_chosen[, colnames(target_chosen) == df_country()]),]
+                country_chosen <- target_chosen[as.vector(!is.na(target_chosen[, colnames(target_chosen) == df_country()])),]
                 if(df_year() == "All"){
                     selecteddata <- country_chosen
                 } else if (df_year() == "From 2010 to 2019"){
@@ -1635,7 +1622,7 @@ server <- function(input, output, session) {
                     selecteddata <- country_chosen %>% filter(Year == df_year())
                 }
             } else if (df_country() == "Global South"){
-                country_chosen <- target_chosen[!is.na(target_chosen$`Global South`), ]
+                country_chosen <- target_chosen[as.vector(!is.na(target_chosen$`Global South`)), ]
                 if(df_year() == "All"){
                     selecteddata <- country_chosen
                 } else if (df_year() == "From 2010 to 2019"){
@@ -1649,7 +1636,7 @@ server <- function(input, output, session) {
                     selecteddata <- country_chosen %>% filter(Year == df_year())
                 }
             } else {
-                country_chosen <- target_chosen[!is.na(target_chosen[, colnames(target_chosen) == df_country()]),]
+                country_chosen <- target_chosen[as.vector(!is.na(target_chosen[, colnames(target_chosen) == df_country()])),]
                 if(df_year() == "All"){
                     selecteddata <- country_chosen
                 } else if (df_year() == "From 2010 to 2019"){
@@ -1664,7 +1651,7 @@ server <- function(input, output, session) {
                 }
             }
         } else { 
-            target_chosen <- df()[!is.na(df()[, colnames(df()) == df_target()]), ]
+            target_chosen <- df()[as.vector(!is.na(df()[, colnames(df()) == df_target()])), ]
             if(df_country() == "All"){
                 country_chosen <- target_chosen
                 if(df_year() == "All"){
@@ -1680,7 +1667,7 @@ server <- function(input, output, session) {
                     selecteddata <- country_chosen %>% filter(Year == df_year())
                 }
             } else if (df_country() == "Global South"){
-                country_chosen <- target_chosen[!is.na(target_chosen$`Global South`), ]
+                country_chosen <- target_chosen[as.vector(!is.na(target_chosen$`Global South`)), ]
                 if(df_year() == "All"){
                     selecteddata <- country_chosen
                 } else if (df_year() == "From 2010 to 2019"){
@@ -1694,7 +1681,7 @@ server <- function(input, output, session) {
                     selecteddata <- country_chosen %>% filter(Year == df_year())
                 }
             } else {
-                country_chosen <- target_chosen[!is.na(target_chosen[, colnames(target_chosen) == df_country()]),]
+                country_chosen <- target_chosen[as.vector(!is.na(target_chosen[, colnames(target_chosen) == df_country()])),]
                 if(df_year() == "All"){
                     selecteddata <- country_chosen
                 } else if (df_year() == "From 2010 to 2019"){
@@ -1737,7 +1724,7 @@ server <- function(input, output, session) {
                     selecteddata <- country_chosen %>% filter(Year == df_year())
                 }
             } else if (df_country() == "Global South"){
-                country_chosen <- target_chosen[!is.na(target_chosen$`Global South`), ]
+                country_chosen <- target_chosen[as.vector(!is.na(target_chosen$`Global South`)), ]
                 if(df_year() == "All"){
                     selecteddata <- country_chosen
                 } else if (df_year() == "From 2010 to 2019"){
@@ -1751,7 +1738,7 @@ server <- function(input, output, session) {
                     selecteddata <- country_chosen %>% filter(Year == df_year())
                 }
             } else {
-                country_chosen <- target_chosen[!is.na(target_chosen[, colnames(target_chosen) == df_country()]),]
+                country_chosen <- target_chosen[as.vector(!is.na(target_chosen[, colnames(target_chosen) == df_country()])),]
                 if(df_year() == "All"){
                     selecteddata <- country_chosen
                 } else if (df_year() == "From 2010 to 2019"){
@@ -1766,7 +1753,7 @@ server <- function(input, output, session) {
                 }
             }
         } else { 
-            target_chosen <- df()[!is.na(df()[, colnames(df()) == df_target()]), ]
+            target_chosen <- df()[as.vector(!is.na(df()[, colnames(df()) == df_target()])), ]
             if(df_country() == "All"){
                 country_chosen <- target_chosen
                 if(df_year() == "All"){
@@ -1782,7 +1769,7 @@ server <- function(input, output, session) {
                     selecteddata <- country_chosen %>% filter(Year == df_year())
                 }
             } else if (df_country() == "Global South"){
-                country_chosen <- target_chosen[!is.na(target_chosen$`Global South`), ]
+                country_chosen <- target_chosen[as.vector(!is.na(target_chosen$`Global South`)), ]
                 if(df_year() == "All"){
                     selecteddata <- country_chosen
                 } else if (df_year() == "From 2010 to 2019"){
@@ -1796,7 +1783,7 @@ server <- function(input, output, session) {
                     selecteddata <- country_chosen %>% filter(Year == df_year())
                 }
             } else {
-                country_chosen <- target_chosen[!is.na(target_chosen[, colnames(target_chosen) == df_country()]),]
+                country_chosen <- target_chosen[as.vector(!is.na(target_chosen[, colnames(target_chosen) == df_country()])),]
                 if(df_year() == "All"){
                     selecteddata <- country_chosen
                 } else if (df_year() == "From 2010 to 2019"){
@@ -1838,7 +1825,7 @@ server <- function(input, output, session) {
                     selecteddata <- country_chosen %>% filter(Year == df_year())
                 }
             } else if (df_country() == "Global South"){
-                country_chosen <- target_chosen[!is.na(target_chosen$`Global South`), ]
+                country_chosen <- target_chosen[as.vector(!is.na(target_chosen$`Global South`)), ]
                 if(df_year() == "All"){
                     selecteddata <- country_chosen
                 } else if (df_year() == "From 2010 to 2019"){
@@ -1852,7 +1839,7 @@ server <- function(input, output, session) {
                     selecteddata <- country_chosen %>% filter(Year == df_year())
                 }
             } else {
-                country_chosen <- target_chosen[!is.na(target_chosen[, colnames(target_chosen) == df_country()]),]
+                country_chosen <- target_chosen[as.vector(!is.na(target_chosen[, colnames(target_chosen) == df_country()])),]
                 if(df_year() == "All"){
                     selecteddata <- country_chosen
                 } else if (df_year() == "From 2010 to 2019"){
@@ -1867,7 +1854,7 @@ server <- function(input, output, session) {
                 }
             }
         } else { 
-            target_chosen <- df()[!is.na(df()[, colnames(df()) == df_target()]), ]
+            target_chosen <- df()[as.vector(!is.na(df()[, colnames(df()) == df_target()])), ]
             if(df_country() == "All"){
                 country_chosen <- target_chosen
                 if(df_year() == "All"){
@@ -1883,7 +1870,7 @@ server <- function(input, output, session) {
                     selecteddata <- country_chosen %>% filter(Year == df_year())
                 }
             } else if (df_country() == "Global South"){
-                country_chosen <- target_chosen[!is.na(target_chosen$`Global South`), ]
+                country_chosen <- target_chosen[as.vector(!is.na(target_chosen$`Global South`)), ]
                 if(df_year() == "All"){
                     selecteddata <- country_chosen
                 } else if (df_year() == "From 2010 to 2019"){
@@ -1897,7 +1884,7 @@ server <- function(input, output, session) {
                     selecteddata <- country_chosen %>% filter(Year == df_year())
                 }
             } else {
-                country_chosen <- target_chosen[!is.na(target_chosen[, colnames(target_chosen) == df_country()]),]
+                country_chosen <- target_chosen[as.vector(!is.na(target_chosen[, colnames(target_chosen) == df_country()])),]
                 if(df_year() == "All"){
                     selecteddata <- country_chosen
                 } else if (df_year() == "From 2010 to 2019"){
@@ -1939,7 +1926,7 @@ server <- function(input, output, session) {
                     selecteddata <- country_chosen %>% filter(Year == df_year())
                 }
             } else if (df_country() == "Global South"){
-                country_chosen <- target_chosen[!is.na(target_chosen$`Global South`), ]
+                country_chosen <- target_chosen[as.vector(!is.na(target_chosen$`Global South`)), ]
                 if(df_year() == "All"){
                     selecteddata <- country_chosen
                 } else if (df_year() == "From 2010 to 2019"){
@@ -1953,7 +1940,7 @@ server <- function(input, output, session) {
                     selecteddata <- country_chosen %>% filter(Year == df_year())
                 }
             } else {
-                country_chosen <- target_chosen[!is.na(target_chosen[, colnames(target_chosen) == df_country()]),]
+                country_chosen <- target_chosen[as.vector(!is.na(target_chosen[, colnames(target_chosen) == df_country()])),]
                 if(df_year() == "All"){
                     selecteddata <- country_chosen
                 } else if (df_year() == "From 2010 to 2019"){
@@ -1968,7 +1955,7 @@ server <- function(input, output, session) {
                 }
             }
         } else { 
-            target_chosen <- df()[!is.na(df()[, colnames(df()) == df_target()]), ]
+            target_chosen <- df()[as.vector(!is.na(df()[, colnames(df()) == df_target()])), ]
             if(df_country() == "All"){
                 country_chosen <- target_chosen
                 if(df_year() == "All"){
@@ -1984,7 +1971,7 @@ server <- function(input, output, session) {
                     selecteddata <- country_chosen %>% filter(Year == df_year())
                 }
             } else if (df_country() == "Global South"){
-                country_chosen <- target_chosen[!is.na(target_chosen$`Global South`), ]
+                country_chosen <- target_chosen[as.vector(!is.na(target_chosen$`Global South`)), ]
                 if(df_year() == "All"){
                     selecteddata <- country_chosen
                 } else if (df_year() == "From 2010 to 2019"){
@@ -1998,7 +1985,7 @@ server <- function(input, output, session) {
                     selecteddata <- country_chosen %>% filter(Year == df_year())
                 }
             } else {
-                country_chosen <- target_chosen[!is.na(target_chosen[, colnames(target_chosen) == df_country()]),]
+                country_chosen <- target_chosen[as.vector(!is.na(target_chosen[, colnames(target_chosen) == df_country()])),]
                 if(df_year() == "All"){
                     selecteddata <- country_chosen
                 } else if (df_year() == "From 2010 to 2019"){
@@ -2040,7 +2027,7 @@ server <- function(input, output, session) {
                     selecteddata <- country_chosen %>% filter(Year == df_year())
                 }
             } else if (df_country() == "Global South"){
-                country_chosen <- target_chosen[!is.na(target_chosen$`Global South`), ]
+                country_chosen <- target_chosen[as.vector(!is.na(target_chosen$`Global South`)), ]
                 if(df_year() == "All"){
                     selecteddata <- country_chosen
                 } else if (df_year() == "From 2010 to 2019"){
@@ -2054,7 +2041,7 @@ server <- function(input, output, session) {
                     selecteddata <- country_chosen %>% filter(Year == df_year())
                 }
             } else {
-                country_chosen <- target_chosen[!is.na(target_chosen[, colnames(target_chosen) == df_country()]),]
+                country_chosen <- target_chosen[as.vector(!is.na(target_chosen[, colnames(target_chosen) == df_country()])),]
                 if(df_year() == "All"){
                     selecteddata <- country_chosen
                 } else if (df_year() == "From 2010 to 2019"){
@@ -2069,7 +2056,7 @@ server <- function(input, output, session) {
                 }
             }
         } else { 
-            target_chosen <- df()[!is.na(df()[, colnames(df()) == df_target()]), ]
+            target_chosen <- df()[as.vector(!is.na(df()[, colnames(df()) == df_target()])), ]
             if(df_country() == "All"){
                 country_chosen <- target_chosen
                 if(df_year() == "All"){
@@ -2085,7 +2072,7 @@ server <- function(input, output, session) {
                     selecteddata <- country_chosen %>% filter(Year == df_year())
                 }
             } else if (df_country() == "Global South"){
-                country_chosen <- target_chosen[!is.na(target_chosen$`Global South`), ]
+                country_chosen <- target_chosen[as.vector(!is.na(target_chosen$`Global South`)), ]
                 if(df_year() == "All"){
                     selecteddata <- country_chosen
                 } else if (df_year() == "From 2010 to 2019"){
@@ -2099,7 +2086,7 @@ server <- function(input, output, session) {
                     selecteddata <- country_chosen %>% filter(Year == df_year())
                 }
             } else {
-                country_chosen <- target_chosen[!is.na(target_chosen[, colnames(target_chosen) == df_country()]),]
+                country_chosen <- target_chosen[as.vector(!is.na(target_chosen[, colnames(target_chosen) == df_country()])),]
                 if(df_year() == "All"){
                     selecteddata <- country_chosen
                 } else if (df_year() == "From 2010 to 2019"){
@@ -2126,97 +2113,97 @@ server <- function(input, output, session) {
     output$table <- DT::renderDataTable(
         # server = FALSE, 
         {
-        if (df_target() == "All"){
-            target_chosen <- df()
-            if(df_country() == "All"){
-                country_chosen <- target_chosen
-                if(df_year() == "All"){
-                    selecteddata <- country_chosen
-                } else if (df_year() == "From 2010 to 2019"){
-                    selecteddata <- country_chosen %>% filter(Year <= 2019 & Year >= 2010)
-                } else if (df_year() == "From 2000 to 2009"){
-                    selecteddata <- country_chosen %>% filter(Year <= 2009 & Year >= 2000)
-                } else if (df_year() == "Before 2000"){
-                    selecteddata <- country_chosen %>% filter(Year < 2000)
+            if (df_target() == "All"){
+                target_chosen <- df()
+                if(df_country() == "All"){
+                    country_chosen <- target_chosen
+                    if(df_year() == "All"){
+                        selecteddata <- country_chosen
+                    } else if (df_year() == "From 2010 to 2019"){
+                        selecteddata <- country_chosen %>% filter(Year <= 2019 & Year >= 2010)
+                    } else if (df_year() == "From 2000 to 2009"){
+                        selecteddata <- country_chosen %>% filter(Year <= 2009 & Year >= 2000)
+                    } else if (df_year() == "Before 2000"){
+                        selecteddata <- country_chosen %>% filter(Year < 2000)
+                    } else {
+                        # year_chosen <- df_year()
+                        selecteddata <- country_chosen %>% filter(Year == df_year())
+                    }
+                } else if (df_country() == "Global South"){
+                    country_chosen <- target_chosen[as.vector(!is.na(target_chosen$`Global South`)), ]
+                    if(df_year() == "All"){
+                        selecteddata <- country_chosen
+                    } else if (df_year() == "From 2010 to 2019"){
+                        selecteddata <- country_chosen %>% filter(Year <= 2019 & Year >= 2010)
+                    } else if (df_year() == "From 2000 to 2009"){
+                        selecteddata <- country_chosen %>% filter(Year <= 2009 & Year >= 2000)
+                    } else if (df_year() == "Before 2000"){
+                        selecteddata <- country_chosen %>% filter(Year < 2000)
+                    } else {
+                        # year_chosen <- df_year()
+                        selecteddata <- country_chosen %>% filter(Year == df_year())
+                    }
                 } else {
-                    # year_chosen <- df_year()
-                    selecteddata <- country_chosen %>% filter(Year == df_year())
+                    country_chosen <- target_chosen[as.vector(!is.na(target_chosen[, colnames(target_chosen) == df_country()])),]
+                    if(df_year() == "All"){
+                        selecteddata <- country_chosen
+                    } else if (df_year() == "From 2010 to 2019"){
+                        selecteddata <- country_chosen %>% filter(Year <= 2019 & Year >= 2010)
+                    } else if (df_year() == "From 2000 to 2009"){
+                        selecteddata <- country_chosen %>% filter(Year <= 2009 & Year >= 2000)
+                    } else if (df_year() == "Before 2000"){
+                        selecteddata <- country_chosen %>% filter(Year < 2000)
+                    } else {
+                        # year_chosen <- df_year()
+                        selecteddata <- country_chosen %>% filter(Year == df_year())
+                    }
                 }
-            } else if (df_country() == "Global South"){
-                country_chosen <- target_chosen[!is.na(target_chosen$`Global South`), ]
-                if(df_year() == "All"){
-                    selecteddata <- country_chosen
-                } else if (df_year() == "From 2010 to 2019"){
-                    selecteddata <- country_chosen %>% filter(Year <= 2019 & Year >= 2010)
-                } else if (df_year() == "From 2000 to 2009"){
-                    selecteddata <- country_chosen %>% filter(Year <= 2009 & Year >= 2000)
-                } else if (df_year() == "Before 2000"){
-                    selecteddata <- country_chosen %>% filter(Year < 2000)
+            } else { 
+                target_chosen <- df()[as.vector(!is.na(df()[, colnames(df()) == df_target()])), ]
+                if(df_country() == "All"){
+                    country_chosen <- target_chosen
+                    if(df_year() == "All"){
+                        selecteddata <- country_chosen
+                    } else if (df_year() == "From 2010 to 2019"){
+                        selecteddata <- country_chosen %>% filter(Year <= 2019 & Year >= 2010)
+                    } else if (df_year() == "From 2000 to 2009"){
+                        selecteddata <- country_chosen %>% filter(Year <= 2009 & Year >= 2000)
+                    } else if (df_year() == "Before 2000"){
+                        selecteddata <- country_chosen %>% filter(Year < 2000)
+                    } else {
+                        # year_chosen <- df_year()
+                        selecteddata <- country_chosen %>% filter(Year == df_year())
+                    }
+                } else if (df_country() == "Global South"){
+                    country_chosen <- target_chosen[as.vector(!is.na(target_chosen$`Global South`)), ]
+                    if(df_year() == "All"){
+                        selecteddata <- country_chosen
+                    } else if (df_year() == "From 2010 to 2019"){
+                        selecteddata <- country_chosen %>% filter(Year <= 2019 & Year >= 2010)
+                    } else if (df_year() == "From 2000 to 2009"){
+                        selecteddata <- country_chosen %>% filter(Year <= 2009 & Year >= 2000)
+                    } else if (df_year() == "Before 2000"){
+                        selecteddata <- country_chosen %>% filter(Year < 2000)
+                    } else {
+                        # year_chosen <- df_year()
+                        selecteddata <- country_chosen %>% filter(Year == df_year())
+                    }
                 } else {
-                    # year_chosen <- df_year()
-                    selecteddata <- country_chosen %>% filter(Year == df_year())
-                }
-            } else {
-                country_chosen <- target_chosen[!is.na(target_chosen[, colnames(target_chosen) == df_country()]),]
-                if(df_year() == "All"){
-                    selecteddata <- country_chosen
-                } else if (df_year() == "From 2010 to 2019"){
-                    selecteddata <- country_chosen %>% filter(Year <= 2019 & Year >= 2010)
-                } else if (df_year() == "From 2000 to 2009"){
-                    selecteddata <- country_chosen %>% filter(Year <= 2009 & Year >= 2000)
-                } else if (df_year() == "Before 2000"){
-                    selecteddata <- country_chosen %>% filter(Year < 2000)
-                } else {
-                    # year_chosen <- df_year()
-                    selecteddata <- country_chosen %>% filter(Year == df_year())
+                    country_chosen <- target_chosen[as.vector(!is.na(target_chosen[, colnames(target_chosen) == df_country()])),]
+                    if(df_year() == "All"){
+                        selecteddata <- country_chosen
+                    } else if (df_year() == "From 2010 to 2019"){
+                        selecteddata <- country_chosen %>% filter(Year <= 2019 & Year >= 2010)
+                    } else if (df_year() == "From 2000 to 2009"){
+                        selecteddata <- country_chosen %>% filter(Year <= 2009 & Year >= 2000)
+                    } else if (df_year() == "Before 2000"){
+                        selecteddata <- country_chosen %>% filter(Year < 2000)
+                    } else {
+                        # year_chosen <- df_year()
+                        selecteddata <- country_chosen %>% filter(Year == df_year())
+                    }
                 }
             }
-        } else {
-            target_chosen <- df()[!is.na(df()[, colnames(df()) == df_target()]), ]
-            if(df_country() == "All"){
-                country_chosen <- target_chosen
-                if(df_year() == "All"){
-                    selecteddata <- country_chosen
-                } else if (df_year() == "From 2010 to 2019"){
-                    selecteddata <- country_chosen %>% filter(Year <= 2019 & Year >= 2010)
-                } else if (df_year() == "From 2000 to 2009"){
-                    selecteddata <- country_chosen %>% filter(Year <= 2009 & Year >= 2000)
-                } else if (df_year() == "Before 2000"){
-                    selecteddata <- country_chosen %>% filter(Year < 2000)
-                } else {
-                    # year_chosen <- df_year()
-                    selecteddata <- country_chosen %>% filter(Year == df_year())
-                }
-            } else if (df_country() == "Global South"){
-                country_chosen <- target_chosen[!is.na(target_chosen$`Global South`), ]
-                if(df_year() == "All"){
-                    selecteddata <- country_chosen
-                } else if (df_year() == "From 2010 to 2019"){
-                    selecteddata <- country_chosen %>% filter(Year <= 2019 & Year >= 2010)
-                } else if (df_year() == "From 2000 to 2009"){
-                    selecteddata <- country_chosen %>% filter(Year <= 2009 & Year >= 2000)
-                } else if (df_year() == "Before 2000"){
-                    selecteddata <- country_chosen %>% filter(Year < 2000)
-                } else {
-                    # year_chosen <- df_year()
-                    selecteddata <- country_chosen %>% filter(Year == df_year())
-                }
-            } else {
-                country_chosen <- target_chosen[!is.na(target_chosen[, colnames(target_chosen) == df_country()]),]
-                if(df_year() == "All"){
-                    selecteddata <- country_chosen
-                } else if (df_year() == "From 2010 to 2019"){
-                    selecteddata <- country_chosen %>% filter(Year <= 2019 & Year >= 2010)
-                } else if (df_year() == "From 2000 to 2009"){
-                    selecteddata <- country_chosen %>% filter(Year <= 2009 & Year >= 2000)
-                } else if (df_year() == "Before 2000"){
-                    selecteddata <- country_chosen %>% filter(Year < 2000)
-                } else {
-                    # year_chosen <- df_year()
-                    selecteddata <- country_chosen %>% filter(Year == df_year())
-                }
-            }
-        }
 
         description_df <- selecteddata[, which(colnames(selecteddata) == "Target 6.1"):which(colnames(selecteddata) == "Target 6.b")] %>%
             tidyr::unite(`SDG 6`, remove = TRUE, sep = "+", na.rm = TRUE)
@@ -2266,7 +2253,7 @@ server <- function(input, output, session) {
                     selecteddata <- country_chosen %>% filter(Year == df_year())
                 }
             } else if (df_country() == "Global South"){
-                country_chosen <- target_chosen[!is.na(target_chosen$`Global South`), ]
+                country_chosen <- target_chosen[as.vector(!is.na(target_chosen$`Global South`)), ]
                 if(df_year() == "All"){
                     selecteddata <- country_chosen
                 } else if (df_year() == "From 2010 to 2019"){
@@ -2280,7 +2267,7 @@ server <- function(input, output, session) {
                     selecteddata <- country_chosen %>% filter(Year == df_year())
                 }
             } else {
-                country_chosen <- target_chosen[!is.na(target_chosen[, colnames(target_chosen) == df_country()]),]
+                country_chosen <- target_chosen[as.vector(!is.na(target_chosen[, colnames(target_chosen) == df_country()])),]
                 if(df_year() == "All"){
                     selecteddata <- country_chosen
                 } else if (df_year() == "From 2010 to 2019"){
@@ -2295,7 +2282,7 @@ server <- function(input, output, session) {
                 }
             }
         } else { 
-            target_chosen <- df()[!is.na(df()[, colnames(df()) == df_target()]), ]
+            target_chosen <- df()[as.vector(!is.na(df()[, colnames(df()) == df_target()])), ]
             if(df_country() == "All"){
                 country_chosen <- target_chosen
                 if(df_year() == "All"){
@@ -2311,7 +2298,7 @@ server <- function(input, output, session) {
                     selecteddata <- country_chosen %>% filter(Year == df_year())
                 }
             } else if (df_country() == "Global South"){
-                country_chosen <- target_chosen[!is.na(target_chosen$`Global South`), ]
+                country_chosen <- target_chosen[as.vector(!is.na(target_chosen$`Global South`)), ]
                 if(df_year() == "All"){
                     selecteddata <- country_chosen
                 } else if (df_year() == "From 2010 to 2019"){
@@ -2325,7 +2312,7 @@ server <- function(input, output, session) {
                     selecteddata <- country_chosen %>% filter(Year == df_year())
                 }
             } else {
-                country_chosen <- target_chosen[!is.na(target_chosen[, colnames(target_chosen) == df_country()]),]
+                country_chosen <- target_chosen[as.vector(!is.na(target_chosen[, colnames(target_chosen) == df_country()])),]
                 if(df_year() == "All"){
                     selecteddata <- country_chosen
                 } else if (df_year() == "From 2010 to 2019"){
@@ -2394,7 +2381,7 @@ server <- function(input, output, session) {
                     selecteddata <- country_chosen %>% filter(Year == df_year())
                 }
             } else if (df_country() == "Global South"){
-                country_chosen <- target_chosen[!is.na(target_chosen$`Global South`), ]
+                country_chosen <- target_chosen[as.vector(!is.na(target_chosen$`Global South`)), ]
                 if(df_year() == "All"){
                     selecteddata <- country_chosen
                 } else if (df_year() == "From 2010 to 2019"){
@@ -2408,7 +2395,7 @@ server <- function(input, output, session) {
                     selecteddata <- country_chosen %>% filter(Year == df_year())
                 }
             } else {
-                country_chosen <- target_chosen[!is.na(target_chosen[, colnames(target_chosen) == df_country()]),]
+                country_chosen <- target_chosen[as.vector(!is.na(target_chosen[, colnames(target_chosen) == df_country()])),]
                 if(df_year() == "All"){
                     selecteddata <- country_chosen
                 } else if (df_year() == "From 2010 to 2019"){
@@ -2423,7 +2410,7 @@ server <- function(input, output, session) {
                 }
             }
         } else { 
-            target_chosen <- df()[!is.na(df()[, colnames(df()) == df_target()]), ]
+            target_chosen <- df()[as.vector(!is.na(df()[, colnames(df()) == df_target()])), ]
             if(df_country() == "All"){
                 country_chosen <- target_chosen
                 if(df_year() == "All"){
@@ -2439,7 +2426,7 @@ server <- function(input, output, session) {
                     selecteddata <- country_chosen %>% filter(Year == df_year())
                 }
             } else if (df_country() == "Global South"){
-                country_chosen <- target_chosen[!is.na(target_chosen$`Global South`), ]
+                country_chosen <- target_chosen[as.vector(!is.na(target_chosen$`Global South`)), ]
                 if(df_year() == "All"){
                     selecteddata <- country_chosen
                 } else if (df_year() == "From 2010 to 2019"){
@@ -2453,7 +2440,7 @@ server <- function(input, output, session) {
                     selecteddata <- country_chosen %>% filter(Year == df_year())
                 }
             } else {
-                country_chosen <- target_chosen[!is.na(target_chosen[, colnames(target_chosen) == df_country()]),]
+                country_chosen <- target_chosen[as.vector(!is.na(target_chosen[, colnames(target_chosen) == df_country()])),]
                 if(df_year() == "All"){
                     selecteddata <- country_chosen
                 } else if (df_year() == "From 2010 to 2019"){
@@ -2506,7 +2493,7 @@ server <- function(input, output, session) {
                     selecteddata <- country_chosen %>% filter(Year == df_year())
                 }
             } else if (df_country() == "Global South"){
-                country_chosen <- target_chosen[!is.na(target_chosen$`Global South`), ]
+                country_chosen <- target_chosen[as.vector(!is.na(target_chosen$`Global South`)), ]
                 if(df_year() == "All"){
                     selecteddata <- country_chosen
                 } else if (df_year() == "From 2010 to 2019"){
@@ -2520,7 +2507,7 @@ server <- function(input, output, session) {
                     selecteddata <- country_chosen %>% filter(Year == df_year())
                 }
             } else {
-                country_chosen <- target_chosen[!is.na(target_chosen[, colnames(target_chosen) == df_country()]),]
+                country_chosen <- target_chosen[as.vector(!is.na(target_chosen[, colnames(target_chosen) == df_country()])),]
                 if(df_year() == "All"){
                     selecteddata <- country_chosen
                 } else if (df_year() == "From 2010 to 2019"){
@@ -2535,7 +2522,7 @@ server <- function(input, output, session) {
                 }
             }
         } else { 
-            target_chosen <- df()[!is.na(df()[, colnames(df()) == df_target()]), ]
+            target_chosen <- df()[as.vector(!is.na(df()[, colnames(df()) == df_target()])), ]
             if(df_country() == "All"){
                 country_chosen <- target_chosen
                 if(df_year() == "All"){
@@ -2551,7 +2538,7 @@ server <- function(input, output, session) {
                     selecteddata <- country_chosen %>% filter(Year == df_year())
                 }
             } else if (df_country() == "Global South"){
-                country_chosen <- target_chosen[!is.na(target_chosen$`Global South`), ]
+                country_chosen <- target_chosen[as.vector(!is.na(target_chosen$`Global South`)), ]
                 if(df_year() == "All"){
                     selecteddata <- country_chosen
                 } else if (df_year() == "From 2010 to 2019"){
@@ -2565,7 +2552,7 @@ server <- function(input, output, session) {
                     selecteddata <- country_chosen %>% filter(Year == df_year())
                 }
             } else {
-                country_chosen <- target_chosen[!is.na(target_chosen[, colnames(target_chosen) == df_country()]),]
+                country_chosen <- target_chosen[as.vector(!is.na(target_chosen[, colnames(target_chosen) == df_country()])),]
                 if(df_year() == "All"){
                     selecteddata <- country_chosen
                 } else if (df_year() == "From 2010 to 2019"){
@@ -2624,7 +2611,7 @@ server <- function(input, output, session) {
                     selecteddata <- country_chosen %>% filter(Year == df_year())
                 }
             } else if (df_country() == "Global South"){
-                country_chosen <- target_chosen[!is.na(target_chosen$`Global South`), ]
+                country_chosen <- target_chosen[as.vector(!is.na(target_chosen$`Global South`)), ]
                 if(df_year() == "All"){
                     selecteddata <- country_chosen
                 } else if (df_year() == "From 2010 to 2019"){
@@ -2638,7 +2625,7 @@ server <- function(input, output, session) {
                     selecteddata <- country_chosen %>% filter(Year == df_year())
                 }
             } else {
-                country_chosen <- target_chosen[!is.na(target_chosen[, colnames(target_chosen) == df_country()]),]
+                country_chosen <- target_chosen[as.vector(!is.na(target_chosen[, colnames(target_chosen) == df_country()])),]
                 if(df_year() == "All"){
                     selecteddata <- country_chosen
                 } else if (df_year() == "From 2010 to 2019"){
@@ -2653,7 +2640,7 @@ server <- function(input, output, session) {
                 }
             }
         } else { 
-            target_chosen <- df()[!is.na(df()[, colnames(df()) == df_target()]), ]
+            target_chosen <- df()[as.vector(!is.na(df()[, colnames(df()) == df_target()])), ]
             if(df_country() == "All"){
                 country_chosen <- target_chosen
                 if(df_year() == "All"){
@@ -2669,7 +2656,7 @@ server <- function(input, output, session) {
                     selecteddata <- country_chosen %>% filter(Year == df_year())
                 }
             } else if (df_country() == "Global South"){
-                country_chosen <- target_chosen[!is.na(target_chosen$`Global South`), ]
+                country_chosen <- target_chosen[as.vector(!is.na(target_chosen$`Global South`)), ]
                 if(df_year() == "All"){
                     selecteddata <- country_chosen
                 } else if (df_year() == "From 2010 to 2019"){
@@ -2683,7 +2670,7 @@ server <- function(input, output, session) {
                     selecteddata <- country_chosen %>% filter(Year == df_year())
                 }
             } else {
-                country_chosen <- target_chosen[!is.na(target_chosen[, colnames(target_chosen) == df_country()]),]
+                country_chosen <- target_chosen[as.vector(!is.na(target_chosen[, colnames(target_chosen) == df_country()])),]
                 if(df_year() == "All"){
                     selecteddata <- country_chosen
                 } else if (df_year() == "From 2010 to 2019"){
@@ -2736,7 +2723,7 @@ server <- function(input, output, session) {
                     selecteddata <- country_chosen %>% filter(Year == df_year())
                 }
             } else if (df_country() == "Global South"){
-                country_chosen <- target_chosen[!is.na(target_chosen$`Global South`), ]
+                country_chosen <- target_chosen[as.vector(!is.na(target_chosen$`Global South`)), ]
                 if(df_year() == "All"){
                     selecteddata <- country_chosen
                 } else if (df_year() == "From 2010 to 2019"){
@@ -2750,7 +2737,7 @@ server <- function(input, output, session) {
                     selecteddata <- country_chosen %>% filter(Year == df_year())
                 }
             } else {
-                country_chosen <- target_chosen[!is.na(target_chosen[, colnames(target_chosen) == df_country()]),]
+                country_chosen <- target_chosen[as.vector(!is.na(target_chosen[, colnames(target_chosen) == df_country()])),]
                 if(df_year() == "All"){
                     selecteddata <- country_chosen
                 } else if (df_year() == "From 2010 to 2019"){
@@ -2765,7 +2752,7 @@ server <- function(input, output, session) {
                 }
             }
         } else { 
-            target_chosen <- df()[!is.na(df()[, colnames(df()) == df_target()]), ]
+            target_chosen <- df()[as.vector(!is.na(df()[, colnames(df()) == df_target()])), ]
             if(df_country() == "All"){
                 country_chosen <- target_chosen
                 if(df_year() == "All"){
@@ -2781,7 +2768,7 @@ server <- function(input, output, session) {
                     selecteddata <- country_chosen %>% filter(Year == df_year())
                 }
             } else if (df_country() == "Global South"){
-                country_chosen <- target_chosen[!is.na(target_chosen$`Global South`), ]
+                country_chosen <- target_chosen[as.vector(!is.na(target_chosen$`Global South`)), ]
                 if(df_year() == "All"){
                     selecteddata <- country_chosen
                 } else if (df_year() == "From 2010 to 2019"){
@@ -2795,7 +2782,7 @@ server <- function(input, output, session) {
                     selecteddata <- country_chosen %>% filter(Year == df_year())
                 }
             } else {
-                country_chosen <- target_chosen[!is.na(target_chosen[, colnames(target_chosen) == df_country()]),]
+                country_chosen <- target_chosen[as.vector(!is.na(target_chosen[, colnames(target_chosen) == df_country()])),]
                 if(df_year() == "All"){
                     selecteddata <- country_chosen
                 } else if (df_year() == "From 2010 to 2019"){
